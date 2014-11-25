@@ -38,7 +38,7 @@ var Trig = (function() {
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
-	var pothag = function pothag( a, b ) {
+	var pythag = function pythag( a, b ) {
 		var a2 = Math.sq( a );
 		var b2 = Math.sq( b );
 		var c2 = a2 + b2;
@@ -173,7 +173,8 @@ var Trig = (function() {
 		toRadians : toRadians,
 		toDegrees : toDegrees,
 
-		pothag : pothag,
+		pythag : pythag,
+		hypotenuse : hypotenuse,
 
 		xFromAngleHypotenuse : xFromAngleHypotenuse,
 		yFromAngleOpposite : yFromAngleOpposite,
