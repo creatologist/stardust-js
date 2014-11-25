@@ -21,6 +21,12 @@ Trig.distance( a, b );
 Trig.angleDistance( a, b );
 
 Trig.Point [object]
+	Point.distance( pointB );
+	Point.distanceX( pointB );
+	Point.distanceY( pointB );
+	Point.angle( pointB );
+	Point.angleDistance( pointB );
+	Point.set( x, y );
 ```
 
 
