@@ -7,7 +7,7 @@ Slowly building up this library with stuff I find useful. Maybe you'll find it u
 Trig.toRadians( deg );
 Trig.toDegrees( rad );
 
-Trig.pothag( a, b );
+Trig.pythag( a, b ); // get hypotenuse of right angle
 
 Trig.xFromAngleHypotenuse( angle, h );
 Trig.yFromAngleOpposite( angle, o );
