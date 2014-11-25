@@ -48,14 +48,14 @@ Utils.overload( funcs ); // overload functions
 var Particles = [];
 
 var Particle = function( x, y ) {
-   this.x = x ? x : 0;
-   this.y = y ? y : 0;
+	this.x = x ? x : 0;
+	this.y = y ? y : 0;
 }
 
 // arguments: Particle
 var f1 = function( p ) {
-  // add particle
-  Particles.push[ p ];
+	// add particle
+	Particles.push[ p ];
 }
 
 // arguments: Number, Number
