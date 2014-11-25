@@ -8,6 +8,7 @@ Trig.toRadians( deg );
 Trig.toDegrees( rad );
 
 Trig.pythag( a, b ); // get hypotenuse of right angle
+Trig.hypotenuse( a, b ); // same as pythag
 
 Trig.xFromAngleHypotenuse( angle, h );
 Trig.yFromAngleOpposite( angle, o );
