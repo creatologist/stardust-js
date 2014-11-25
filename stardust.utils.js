@@ -31,7 +31,7 @@ var Utils = (function() {
 
 	var overload = function( funcs ) {
 		var a = [];
-		for ( var i = arguments.length; i--; ) {
+		for ( var i = 0, len = arguments.length; i < len; i++ ) {
 			a.push( arguments[i] );
 		}
 		
@@ -314,9 +314,11 @@ var Utils = (function() {
 		if ( Array.isArray( o ) && Array.isArray( type ) ) {
 			return areThese( o, type );
 		};
+		
 		try {
 			if ( type != undefined ) {
 				if ( typeof o == type ) return true;
+				else if ( o instanceof type ) return true;
 				else if ( typeof o == type.name.toString().toLowerCase() ) return true;
 				else if ( type.name.toString() == 'Array' && Array.isArray( o ) ) return true;
 				else return false;
@@ -334,10 +336,14 @@ var Utils = (function() {
 
 	var areThese = function( vars, types ) {
 		var name;
+
 		for ( var i = vars.length; i--; ) {
 			name = types[i].name.toString().toLowerCase();
+			if ( name === '' ) name = types[ i ];
 			if ( !is( vars[i], name ) ) return false;
 		}
+
+
 		return true;
 	}
 
