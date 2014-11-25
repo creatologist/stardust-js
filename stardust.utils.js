@@ -6,7 +6,7 @@
  		*===========================================================================
 		*---------------------------------------------------------------------------
  		*
- 		*	just some stuff
+ 		*	
  		*
  		============================================================================
 		*
@@ -89,7 +89,7 @@ var Utils = (function() {
 
 		//if ( val ) return DPI;
 
-		// Pure JS Version
+		// Pure JS Version --
 		/*var $head = document.head;
 			$head.innerHTML += '<style id="' + 'dpi-sniffer-css' + '" type="text/css"></style>';
 
@@ -142,7 +142,7 @@ var Utils = (function() {
 
 	var dpi = function( val ) {
 		if ( !$ ) {
-			console.log( 'Utils.dpi() needs jQuery' );
+			console.log( '[Utils.dpi] jQuery library needed' );
 			return val;
 		}
 
@@ -307,7 +307,7 @@ var Utils = (function() {
 	}
 
 
-	
+
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 	 var is = function( o, type ) {

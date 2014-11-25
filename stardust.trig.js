@@ -6,7 +6,7 @@
  		*===========================================================================
 		*---------------------------------------------------------------------------
  		*
- 		*	it's a numbers game
+ 		*	
  		*
  		============================================================================
 		*
@@ -15,39 +15,6 @@
 		*
 		============================================================================
 */
-
-var Point = function( x, y ) {
-	this.x = x ? x : 0;
-	this.y = y ? y : 0;
-};
-
-Point.prototype = {
-	distance : function( point ) {
-		return Trig.distance( this, point );
-	},
-	
-	distanceX : function( point ) {
-		return point.x - this.x;
-	},
-	
-	distanceY : function( point ) {
-		return point.y - this.y;
-	},
-	
-	angle : function( point, degrees ) {
-		return Trig.angle( this, point );
-	},
-
-	angleDistance : function( point ) {
-		Trig.angleDistance( this, point );
-	},
-	
-	set : function( x, y ) {
-		this.x = x;
-		this.y = y;
-	}
-	
-};
 
 var Trig = (function() {
 
@@ -161,6 +128,43 @@ var Trig = (function() {
 	};
 
 
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+
+	var Point = function( x, y ) {
+		this.x = x ? x : 0;
+		this.y = y ? y : 0;
+	};
+
+	Point.prototype = {
+		distance : function( point ) {
+			return Trig.distance( this, point );
+		},
+		
+		distanceX : function( point ) {
+			return point.x - this.x;
+		},
+		
+		distanceY : function( point ) {
+			return point.y - this.y;
+		},
+		
+		angle : function( point, degrees ) {
+			return Trig.angle( this, point );
+		},
+
+		angleDistance : function( point ) {
+			Trig.angleDistance( this, point );
+		},
+		
+		set : function( x, y ) {
+			this.x = x;
+			this.y = y;
+		}
+		
+	};
+
+
 	// ===========================================================================================================================
 	// ===========================================================================================================================
 
@@ -180,7 +184,9 @@ var Trig = (function() {
 		angle : angle,
 		distance : distance,
 
-		angleDistance : angleDistance
+		angleDistance : angleDistance,
+
+		Point : Point
 	};
 
 })();
