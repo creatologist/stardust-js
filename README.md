@@ -43,7 +43,7 @@ Utils.overload( funcs ); // overload functions
 
 ```
 
-### Utils.overload()
+### Utils.overload() - Overloading Functions
 ```javascript
 var Particles = [];
 
