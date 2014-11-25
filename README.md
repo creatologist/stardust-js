@@ -32,19 +32,50 @@ Utils.map( value, start1, stop1, start2, stop2, limit );
 Utils.dpi(); // get screen dpi
 Utils.dpi( val ); // calculate pixel value relative to dpi
 
-Utils.browserInfo; // get agent, version, name, os, mobile, is_mobile
-Utils.browserInfo();
-
-Utils.orientation; // get screen orientation
-Utils.orientation();
+Utils.browserInfo; // return [object] agent, version, name, os, mobile, is_mobile
+Utils.orientation; // return screen orientation - 'portrait' vs 'landscape'
+Utils.ratio; // return window ratio
 
 Utils.random.flipCoin(); // true or false
 Utils.random.pick( array ); // returns picked array item
 
-Utils.ratio(); // window ratio
-
 Utils.overload( funcs ); // overload functions
 
+```
+
+### Utils.overload Example
+```javascript
+var Particles = [];
+
+var Particle = function( x, y ) {
+   this.x = x ? x : 0;
+   this.y = y ? y : 0;
+}
+
+// arguments: Point
+var f1 = function( p ) {
+  console.log( 'adding particle' );
+  console.log( p );
+  Particles.push[ p ];
+}
+
+// arguments: Number, Number
+var f2 = function( x, y ) {
+	console.log( 'creating + adding particle' );
+	console.log( x, y );
+	Particles.push[ new Particle( x, y ) ];
+}
+
+// create overloaded function
+var addParticle = Utils.overload(
+	[ [ Particle ], f1 ],
+	[ [ Number, Number ], f2 ]
+);
+
+addParticle( 100, 100 );
+
+var p = new Particle( 50, 50 );
+addParticle( p );
 ```
 
 
