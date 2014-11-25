@@ -174,7 +174,7 @@ var Trig = (function() {
 		toDegrees : toDegrees,
 
 		pythag : pythag,
-		hypotenuse : hypotenuse,
+		hypotenuse : pythag,
 
 		xFromAngleHypotenuse : xFromAngleHypotenuse,
 		yFromAngleOpposite : yFromAngleOpposite,
