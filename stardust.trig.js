@@ -149,7 +149,7 @@ var Trig = (function() {
 			return point.y - this.y;
 		},
 		
-		angle : function( point, degrees ) {
+		angle : function( point ) {
 			return Trig.angle( this, point );
 		},
 
@@ -158,8 +158,8 @@ var Trig = (function() {
 		},
 		
 		set : function( x, y ) {
-			this.x = x;
-			this.y = y;
+			this.x = x ? x : this.x;
+			this.y = y ? y : this.y;
 		}
 		
 	};
