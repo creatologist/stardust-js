@@ -52,7 +52,7 @@ var Particle = function( x, y ) {
    this.y = y ? y : 0;
 }
 
-// arguments: Point
+// arguments: Particle
 var f1 = function( p ) {
   console.log( 'adding particle' );
   console.log( p );
