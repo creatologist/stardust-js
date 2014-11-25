@@ -54,15 +54,13 @@ var Particle = function( x, y ) {
 
 // arguments: Particle
 var f1 = function( p ) {
-  console.log( 'adding particle' );
-  console.log( p );
+  // add particle
   Particles.push[ p ];
 }
 
 // arguments: Number, Number
 var f2 = function( x, y ) {
-	console.log( 'creating + adding particle' );
-	console.log( x, y );
+	// create and add particle
 	Particles.push[ new Particle( x, y ) ];
 }
 
