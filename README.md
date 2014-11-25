@@ -72,9 +72,11 @@ var addParticle = Utils.overload(
 	[ [ Number, Number ], f2 ]
 );
 
-addParticle( 100, 100 );
-
+// create particle
 var p = new Particle( 50, 50 );
+
+// create and/or add particles via overloaded function
+addParticle( 100, 100 );
 addParticle( p );
 ```
 
