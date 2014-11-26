@@ -36,7 +36,7 @@ Trig.Point [object]
 Utils.clamp( val, min, max );
 Utils.map( value, start1, stop1, start2, stop2, limit ); // map one set of numbers to another
 
-Utils.dpi(); // get screen dpi
+Utils.dpi; // get screen dpi
 Utils.dpi( val ); // calculate pixel value relative to dpi
 
 Utils.browserInfo; // return [object] agent, version, name, os, mobile, is_mobile
