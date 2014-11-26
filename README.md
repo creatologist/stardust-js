@@ -60,21 +60,21 @@ var Particle = function( x, y ) {
 }
 
 // arguments: Particle
-var f1 = function( p ) {
+var func1 = function( p ) {
 	// add particle
 	Particles.push[ p ];
 };
 
 // arguments: Number, Number
-var f2 = function( x, y ) {
+var func2 = function( x, y ) {
 	// create and add particle
 	Particles.push[ new Particle( x, y ) ];
 };
 
 // create overloaded function
 var addParticle = Utils.overload(
-	[ [ Particle ], f1 ],
-	[ [ Number, Number ], f2 ]
+	[ [ Particle ], func1 ],
+	[ [ Number, Number ], func2 ]
 );
 
 // create particle
