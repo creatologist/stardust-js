@@ -279,7 +279,7 @@ var Utils = (function() {
 		
 		if ( window.innerWidth > window.innerHeight ) return 'landscape';
 		else return 'portrait';
-	}
+	};
 
 
 	// ---------------------------------------------------------------------------------------------------------------------------
@@ -298,13 +298,13 @@ var Utils = (function() {
 				if ( _random >= ( _chance * j ) && _random <= ( _chance * ( j+1) ) ) return array[ i - 1 ];
 			}
 		}
-	}
+	};
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 	var ratio = function() {
 		return window.innerWidth / window.innerHeight;
-	}
+	};
 
 
 
@@ -332,7 +332,7 @@ var Utils = (function() {
 		} catch( e ) {
 			return false;
 		}
-	}
+	};
 
 	var areThese = function( vars, types ) {
 		var name;
@@ -345,7 +345,7 @@ var Utils = (function() {
 
 
 		return true;
-	}
+	};
 
 
 	// ===========================================================================================================================
@@ -366,11 +366,15 @@ var Utils = (function() {
 
 	o.orientation.toString = function() {
 		return orientation();
-	}
+	};
 
 	o.ratio.toString = function() {
 		return ratio();
-	}
+	};
+
+	o.dpi.toString = function() {
+		return dpi();
+	};
 
 	return o;
 
