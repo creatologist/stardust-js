@@ -16,7 +16,7 @@
 		============================================================================
 */
 
-var Trig = (function() {
+var Trig = Trig ? Trig : (function() {
 
 	window.Math = window.Math != undefined ? window.Math : {};
 
