@@ -7,19 +7,19 @@ Slowly building up this library with stuff I find useful. Maybe you'll find it u
 Trig.toRadians( deg );
 Trig.toDegrees( rad );
 
-Trig.pythag( a, b ); // get hypotenuse of right angle
-Trig.hypotenuse( a, b ); // same as pythag
+Trig.pythag( pointA, pointB ); // get hypotenuse of right angle
+Trig.hypotenuse( pointA, pointB ); // same as pythag
 
-Trig.xFromAngleHypotenuse( angle, h );
-Trig.yFromAngleOpposite( angle, o );
-Trig.xyFromAngleHypotenuse( angle, h );
+Trig.xFromAngleHypotenuse( angle, hyp );
+Trig.yFromAngleOpposite( angle, opp );
+Trig.xyFromAngleHypotenuse( angle, hyp );
 
 Trig.degreesRadiusToPosition( degrees, radius );
 
-Trig.angle( a, b );
-Trig.distance( a, b );
+Trig.angle( pointA, pointB );
+Trig.distance( pointA, pointB );
 
-Trig.angleDistance( a, b );
+Trig.angleDistance( pointA, pointB );
 
 Trig.Point [object]
 	Point.distance( pointB );
@@ -34,7 +34,7 @@ Trig.Point [object]
 ### Utils
 ```javascript
 Utils.clamp( val, min, max );
-Utils.map( value, start1, stop1, start2, stop2, limit );
+Utils.map( value, start1, stop1, start2, stop2, limit ); // map one set of numbers to another
 
 Utils.dpi(); // get screen dpi
 Utils.dpi( val ); // calculate pixel value relative to dpi
@@ -44,7 +44,7 @@ Utils.orientation; // return screen orientation - 'portrait' vs 'landscape'
 Utils.ratio; // return window ratio
 
 Utils.random.flipCoin(); // true or false
-Utils.random.pick( array ); // returns picked array item
+Utils.random.pick( array ); // returns random array item
 
 Utils.overload( funcs ); // overload functions
 
