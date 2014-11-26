@@ -37,14 +37,14 @@ Utils.clamp( val, min, max );
 Utils.map( value, start1, stop1, start2, stop2, limit ); // map one set of numbers to another
 
 Utils.dpi; // get screen dpi
-Utils.dpi( val ); // calculate pixel value relative to dpi
+Utils.dpi( val ); // get pixel value relative to dpi
 
-Utils.browserInfo; // return [object] agent, version, name, os, mobile, is_mobile
-Utils.orientation; // return screen orientation - 'portrait' vs 'landscape'
-Utils.ratio; // return window ratio
+Utils.browserInfo; // get [object] agent, version, name, os, mobile, is_mobile
+Utils.orientation; // get screen orientation - 'portrait' vs 'landscape'
+Utils.ratio; // get window ratio
 
 Utils.random.flipCoin(); // true or false
-Utils.random.pick( array ); // returns random array item
+Utils.random.pick( array ); // get random array item
 
 Utils.overload( funcs ); // overload functions
 
