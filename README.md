@@ -88,7 +88,8 @@ addParticle( p );
 ### Shapes (+Align)
 ```javascript
 
-Shapes.getPath( shape, arguments );
+Shapes.getPath( shapeEnum, arguments ); // returns array of {x: xpos, y: ypos}
+Shapes.getPath( shapeString, arguments );
 
 // save ENUMS in object (CIRCLE, TRIANGLE, SQUARE, etc.)
 Shapes.storeEnums( window );
