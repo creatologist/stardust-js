@@ -4,49 +4,51 @@ Slowly building up this library with stuff I find useful. Maybe you'll find it u
 
 ### Trig
 ```javascript
-Trig.toRadians( deg );
-Trig.toDegrees( rad );
+Trig.
+	toRadians( deg );
+	toDegrees( rad );
 
-Trig.pythag( pointA, pointB ); // get hypotenuse of right angle
-Trig.hypotenuse( pointA, pointB ); // same as pythag
+	pythag( pointA, pointB ); // get hypotenuse of right angle
+	hypotenuse( pointA, pointB ); // same as pythag
 
-Trig.xFromAngleHypotenuse( angle, hyp );
-Trig.yFromAngleOpposite( angle, opp );
-Trig.xyFromAngleHypotenuse( angle, hyp );
+	xFromAngleHypotenuse( angle, hyp );
+	yFromAngleOpposite( angle, opp );
+	xyFromAngleHypotenuse( angle, hyp );
 
-Trig.degreesRadiusToPosition( degrees, radius );
+	degreesRadiusToPosition( degrees, radius );
 
-Trig.angle( pointA, pointB );
-Trig.distance( pointA, pointB );
+	angle( pointA, pointB );
+	distance( pointA, pointB );
 
-Trig.angleDistance( pointA, pointB );
+	angleDistance( pointA, pointB );
 
 Trig.Point [object]
-	Point.distance( pointB );
-	Point.distanceX( pointB );
-	Point.distanceY( pointB );
-	Point.angle( pointB );
-	Point.angleDistance( pointB );
-	Point.set( x, y );
+	distance( pointB );
+	distanceX( pointB );
+	distanceY( pointB );
+	angle( pointB );
+	angleDistance( pointB );
+	set( x, y );
 ```
 
 
 ### Utils
 ```javascript
-Utils.clamp( val, min, max );
-Utils.map( value, start1, stop1, start2, stop2, limit ); // map one set of numbers to another
+Utils.
+	clamp( val, min, max );
+	map( value, start1, stop1, start2, stop2, limit ); // map one set of numbers to another
 
-Utils.dpi; // get screen dpi
-Utils.dpi( val ); // get pixel value relative to dpi
+	dpi; // get screen dpi
+	dpi( val ); // get pixel value relative to dpi
 
-Utils.browserInfo; // get [object] agent, version, name, os, mobile, is_mobile
-Utils.orientation; // get screen orientation - 'portrait' vs 'landscape'
-Utils.ratio; // get window ratio
+	browserInfo; // get [object] agent, version, name, os, mobile, is_mobile
+	orientation; // get screen orientation - 'portrait' vs 'landscape'
+	ratio; // get window ratio
 
-Utils.random.flipCoin(); // true or false
-Utils.random.pick( array ); // get random array item
+	random.flipCoin(); // true or false
+	random.pick( array ); // get random array item
 
-Utils.overload( funcs ); // overload functions
+	overload( funcs ); // overload functions
 
 ```
 
@@ -129,11 +131,12 @@ Align.
 
 ### Social
 ```javascript
-Social.Twitter.share( params );
+Social.
+	Twitter.share( params );
 
-Social.Facebook.share( params );
-Social.Facebook.feed( params );
+	Facebook.share( params );
+	Facebook.feed( params );
 
-Social.Pinterest.share( params );
+	Pinterest.share( params );
 
 ```
