@@ -90,7 +90,11 @@ addParticle( p );
 
 Shapes.getPath( shape, arguments );
 
-Shapes. // arguments
+// save ENUMS in object (CIRCLE, TRIANGLE, SQUARE, etc.)
+Shapes.storeEnums( window );
+
+// Shapes ENUMS
+Shapes. // getPath() arguments
 	CIRCLE; // radius, (origin, alignment, points )
 	TRIANGLE; // radius, (origin, alignment );
 	SQUARE; // radius, (origin, alignment );
@@ -102,7 +106,11 @@ Shapes. // arguments
 	NONAGON; // radius, (origin, alignment );
 	DECAGON; // radius, (origin, alignment );
 
-Align. // alignment
+// save ENUMS in object (CENTER, TOP_LEFT, TOP, etc.)
+Align.storeEnums( window );
+
+// Align ENUMS
+Align.
 	CENTER;
 	TOP_LEFT;
 	TOP;
