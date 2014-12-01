@@ -136,6 +136,13 @@ var Shapes = Shapes ? Shapes : (function() {
 
 	circleResolution( 36 );
 
+	var defaultRadius = function( val ) {
+		defaultRadius.toString = function() { 
+			return val;
+		}
+	};
+
+	defaultRadius( 50 );
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
@@ -153,8 +160,8 @@ var Shapes = Shapes ? Shapes : (function() {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 	var rectangle = function( width, height, origin, alignment ) {
-		width		= width ? width : 50;
-		height 		= height ? height : 50;
+		width		= width ? width : defaultRadius;
+		height 		= height ? height : defaultRadius;
 		origin 		= origin ? origin : { x: 0, y: 0 };
 		alignment 	= alignment ? alignment : Align.CENTER;
 
@@ -186,7 +193,7 @@ var Shapes = Shapes ? Shapes : (function() {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 	var circle = function( radius, origin, alignment, points ) {
-		radius 		= radius ? radius : 50;
+		radius 		= radius ? radius : defaultRadius;
 		origin 		= origin ? origin : { x: 0, y: 0 };
 		alignment 	= alignment ? alignment : Align.CENTER;
 		points 		= points ? points : circleResolution;
@@ -243,7 +250,8 @@ var Shapes = Shapes ? Shapes : (function() {
 	var o = {
 		storeEnums: storeEnums,
 		getPath : getPath,
-		circleResolution : circleResolution
+		circleResolution : circleResolution,
+		defaultRadius : defaultRadius
 	}
 
 	storeEnums( o );
