@@ -38,7 +38,7 @@ Utils.
 	clamp( val, min, max );
 	map( value, start1, stop1, start2, stop2, limit ); // map one set of numbers to another
 
-	dpi; // get screen dpi
+	dpi; // get screen dpi -- needs jQuery library
 	dpi( val ); // get pixel value relative to dpi
 
 	browserInfo; // get [object] agent, version, name, os, mobile, is_mobile
