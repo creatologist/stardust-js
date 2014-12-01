@@ -24,6 +24,10 @@ var Trig = Trig ? Trig : (function() {
 		return n*n;
 	};
 
+	var round = function( val ) {
+		return Math.round( val * 10000) / 10000;
+	}
+
 	// ---------------------------------------------------------------------------------------------------------------------------
 	
 	var toRadians = function toRadians( degrees ) {
@@ -64,6 +68,9 @@ var Trig = Trig ? Trig : (function() {
 		var o = {};
 		o.x = Trig.xFromAngleHypotenuse( angle, h );
 		o.y = Trig.yFromAngleOpposite( angle, o.x );
+
+		o.x = round( o.x );
+		o.y = round( o.y );
 		return o;
 	};
 
@@ -74,6 +81,8 @@ var Trig = Trig ? Trig : (function() {
 		var o = {};
 		o.x = Math.cos( toRadians( degrees ) ) * radius;
 		o.y = Math.sin( toRadians( degrees ) ) * radius;
+		o.x = round( o.x );
+		o.y = round( o.y );
 		return o;
 	};
 
