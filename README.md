@@ -91,14 +91,14 @@ addParticle( p );
 ```javascript
 // returns array of {x: xpos, y: ypos}
 // for shape arg you can pass an enum value (number) or string value (lowercase)
-Shapes.getPath( shape, props ); 
+Shapes.getPath( shape, xtraArgs ); 
 
 // set resolution of a circle (how many vertices) - default value = 36
 Shapes.circleResolution( numPoints );
 
 // Shapes ENUMS - stored in window / global scope - please comment out if you want
 // Shapes.storeEnums( window );
-Shapes. // getPath() props - ALL optional - default radius is 50
+Shapes. // getPath() additional arguments - ALL optional - default radius is 50
 	CIRCLE; // radius, origin, alignment, points
 	TRIANGLE; // radius, origin, alignment
 	SQUARE; // radius, origin, alignment
