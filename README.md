@@ -90,8 +90,10 @@ addParticle( p );
 ### Shapes (+Align)
 ```javascript
 // returns array of {x: xpos, y: ypos}
-// for shape you can use enum values (numbers) or string values (lowercase)
+// for shape arg you can pass an enum value (number) or string value (lowercase)
 Shapes.getPath( shape, arguments ); 
+
+Shapes.circleResolution( numPoints ); // default value: 36
 
 // save ENUMS in object (CIRCLE, TRIANGLE, SQUARE, etc.)
 // in case you don't want to keep typeing out Shapes.CIRCLE, Shapes.TRIANGLE, etc
