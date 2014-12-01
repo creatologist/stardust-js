@@ -93,12 +93,15 @@ addParticle( p );
 // for shape arg you can pass an enum value (number) or string value (lowercase)
 Shapes.getPath( shape, xtraArgs ); 
 
-// set resolution of a circle (how many vertices) - default value = 36
-Shapes.circleResolution( numPoints );
+Shapes.circleResolution; // get circleResolution -- default value = 36
+Shapes.circleResolution( numVertices ); // set resolution / smoothness of circle
+
+Shapes.defaultRadius; // get defaultRadius
+Shapes.defaultRadius( radius ); // set defaultRadius
 
 // Shapes ENUMS - stored in window / global scope - please comment out if you want
 // Shapes.storeEnums( window );
-Shapes. // getPath() additional arguments - ALL optional - default radius is 50
+Shapes. // getPath() additional arguments - ALL optional - defaultRadius is 50
 	CIRCLE; // radius, origin, alignment, points
 	TRIANGLE; // radius, origin, alignment
 	SQUARE; // radius, origin, alignment
