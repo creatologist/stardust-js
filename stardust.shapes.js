@@ -73,8 +73,8 @@ var Shapes = Shapes ? Shapes : (function() {
 
 	var _ = {};
 
-	var point = function( x, y ) {
-		return { x: x, y: y };
+	var point = function( x, y, origin ) {
+		return { x: origin ? x + origin.x : x, y: origin ? y + origin.y : y };
 	}
 
 
@@ -125,10 +125,10 @@ var Shapes = Shapes ? Shapes : (function() {
 
 		var path = [];
 
-		path[ 0 ] = point( -half_w, -half_h );
-		path[ 1 ] = point( half_w, -half_h );
-		path[ 2 ] = point( half_w, half_h );
-		path[ 3 ] = point( -half_w, half_h );
+		path[ 0 ] = point( -half_w, -half_h, origin );
+		path[ 1 ] = point( half_w, -half_h, origin );
+		path[ 2 ] = point( half_w, half_h, origin );
+		path[ 3 ] = point( -half_w, half_h, origin );
 
 		return path;
 	};
@@ -150,8 +150,13 @@ var Shapes = Shapes ? Shapes : (function() {
 
 		var inc = 360 / points;
 
+		var point;
+
 		for ( var i = 0; i < points; i++ ) {
-			path.push( Trig.degreesRadiusToPosition( i * inc, radius ) )
+			point = Trig.degreesRadiusToPosition( i * inc, radius );
+			point.x += origin.x;
+			point.y += origin.y;
+			path.push( point );
 		}
 
 		return path;
