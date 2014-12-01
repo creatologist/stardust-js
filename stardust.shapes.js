@@ -50,7 +50,7 @@ var Align = Align ? Align : (function() {
 	}
 
 	storeEnums( o );
-	storeEnums( window );
+	//storeEnums( window );
 
 	return o;
 
@@ -196,7 +196,7 @@ var Shapes = Shapes ? Shapes : (function() {
 	}
 
 	storeEnums( o );
-	storeEnums( window );
+	//storeEnums( window );
 
 	_ = {
 		circle: circle,
