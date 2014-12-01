@@ -89,8 +89,6 @@ addParticle( p );
 
 ### Shapes
 ```javascript
-PLEASE READ: alignment is CENTER only - going to add alignment logic in later :)
-
 // returns array of {x: xpos, y: ypos}
 // for shape arg you can pass an enum value (number) or string value (lowercase)
 Shapes.getPath( shape, props ); 
