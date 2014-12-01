@@ -89,15 +89,16 @@ addParticle( p );
 
 ### Shapes
 ```javascript
+Shapes.
 // returns array of {x: xpos, y: ypos}
 // for shape arg you can pass an enum value (number) or string value (lowercase)
-Shapes.getPath( shape, xtraArgs ); 
+	getPath( shape, xtraArgs ); 
 
-Shapes.circleResolution; // get circleResolution -- default value = 36
-Shapes.circleResolution( numVertices ); // set resolution / smoothness of circle
+	circleResolution; // get circleResolution -- default value = 36
+	circleResolution( numVertices ); // set resolution / smoothness of circle
 
-Shapes.defaultRadius; // get defaultRadius
-Shapes.defaultRadius( radius ); // set defaultRadius
+	defaultRadius; // get defaultRadius
+	defaultRadius( radius ); // set defaultRadius
 
 // Shapes ENUMS - stored in window / global scope - please comment out if you want
 // Shapes.storeEnums( window );
