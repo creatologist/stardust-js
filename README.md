@@ -89,9 +89,12 @@ addParticle( p );
 
 ### Shapes (+Align)
 ```javascript
+PLEASE READ:
+// alignment is CENTER only - going to add alignment logic in later :)
+
 // returns array of {x: xpos, y: ypos}
 // for shape arg you can pass an enum value (number) or string value (lowercase)
-Shapes.getPath( shape, arguments ); 
+Shapes.getPath( shape, props ); 
 
 // set resolution of a circle (how many vertices) - default value = 36
 Shapes.circleResolution( numPoints );
@@ -101,17 +104,17 @@ Shapes.circleResolution( numPoints );
 Shapes.storeEnums( window );
 
 // Shapes ENUMS
-Shapes. // getPath() arguments
-	CIRCLE; // radius, (origin, alignment, points )
-	TRIANGLE; // radius, (origin, alignment );
-	SQUARE; // radius, (origin, alignment );
-	RECTANGLE; // width, height, (origin, alignment );
-	PENTAGON; // radius, (origin, alignment );
-	HEXAGON; // radius, (origin, alignment );
-	HEPTAGON; // radius, (origin, alignment );
-	OCTAGON; // radius, (origin, alignment );
-	NONAGON; // radius, (origin, alignment );
-	DECAGON; // radius, (origin, alignment );
+Shapes. // getPath() props - ALL optional - default radius is 50
+	CIRCLE; // radius, origin, alignment, points
+	TRIANGLE; // radius, origin, alignment
+	SQUARE; // radius, origin, alignment
+	RECTANGLE; // width, height, origin, alignment
+	PENTAGON; // radius, origin, alignment
+	HEXAGON; // radius, origin, alignment
+	HEPTAGON; // radius, origin, alignment
+	OCTAGON; // radius, origin, alignment
+	NONAGON; // radius, origin, alignment
+	DECAGON; // radius, origin, alignment
 
 // save ENUMS in object (CENTER, TOP_LEFT, TOP, etc.)
 // in case you don't want to keep typeing out Align.CENTER, Align.TOP_LEFT, etc
