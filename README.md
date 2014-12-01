@@ -87,11 +87,12 @@ addParticle( p );
 
 ### Shapes (+Align)
 ```javascript
-
-Shapes.getPath( shapeEnum, arguments ); // returns array of {x: xpos, y: ypos}
-Shapes.getPath( shapeString, arguments );
+// returns array of {x: xpos, y: ypos}
+// for shape you can use enum values (numbers) or string values (lowercase)
+Shapes.getPath( shape, arguments ); 
 
 // save ENUMS in object (CIRCLE, TRIANGLE, SQUARE, etc.)
+// in case you don't want to keep typeing out Shapes.CIRCLE, Shapes.TRIANGLE, etc
 Shapes.storeEnums( window );
 
 // Shapes ENUMS
@@ -108,6 +109,7 @@ Shapes. // getPath() arguments
 	DECAGON; // radius, (origin, alignment );
 
 // save ENUMS in object (CENTER, TOP_LEFT, TOP, etc.)
+// in case you don't want to keep typeing out Align.CENTER, Align.TOP_LEFT, etc
 Align.storeEnums( window );
 
 // Align ENUMS
