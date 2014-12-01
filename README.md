@@ -87,7 +87,7 @@ addParticle( 100, 100 );
 addParticle( p );
 ```
 
-### Shapes (+Align)
+### Shapes
 ```javascript
 PLEASE READ:
 // alignment is CENTER only - going to add alignment logic in later :)
@@ -115,7 +115,10 @@ Shapes. // getPath() props - ALL optional - default radius is 50
 	OCTAGON; // radius, origin, alignment
 	NONAGON; // radius, origin, alignment
 	DECAGON; // radius, origin, alignment
+```
 
+### Align (included in Shapes)
+```javascript
 // save ENUMS in object (CENTER, TOP_LEFT, TOP, etc.)
 // in case you don't want to keep typeing out Align.CENTER, Align.TOP_LEFT, etc
 Align.storeEnums( window );
@@ -131,7 +134,6 @@ Align.
 	BOTTOM;
 	BOTTOM_LEFT;
 	LEFT;
-
 
 ```
 
