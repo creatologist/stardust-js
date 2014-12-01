@@ -93,7 +93,8 @@ addParticle( p );
 // for shape arg you can pass an enum value (number) or string value (lowercase)
 Shapes.getPath( shape, arguments ); 
 
-Shapes.circleResolution( numPoints ); // default value: 36
+// set resolution of a circle (how many vertices) - default value = 36
+Shapes.circleResolution( numPoints );
 
 // save ENUMS in object (CIRCLE, TRIANGLE, SQUARE, etc.)
 // in case you don't want to keep typeing out Shapes.CIRCLE, Shapes.TRIANGLE, etc
