@@ -50,7 +50,7 @@ var Align = Align ? Align : (function() {
 	}
 
 	storeEnums( o );
-	//storeEnums( window );
+	storeEnums( window );
 
 	return o;
 
@@ -75,7 +75,45 @@ var Shapes = Shapes ? Shapes : (function() {
 
 	var point = function( x, y, origin ) {
 		return { x: origin ? x + origin.x : x, y: origin ? y + origin.y : y };
-	}
+	};
+
+	var align = function( point, alignment, radiusX, radiusY ) {
+		switch( alignment ) {
+			case Align.CENTER:
+				
+				break;
+			case Align.LEFT:
+				point.x += radiusX;
+				break;
+			case Align.RIGHT:
+				point.x -= radiusX;
+				break;
+			case Align.TOP_LEFT:
+				point.x += radiusX;
+				point.y += radiusY;
+				break;
+			case Align.TOP_RIGHT:
+				point.x -= radiusX;
+				point.y -= radiusY;
+				break;
+			case Align.TOP:
+				point.y += radiusY;
+				break;
+			case Align.BOTTOM:
+				point.y -= radiusY;
+				break;
+			case Align.BOTTOM_LEFT:
+				point.x += radiusX;
+				point.y -= radiusY;
+				break;
+			case Align.BOTTOM_RIGHT:
+				point.x -= radiusX;
+				point.y -= radiusY;
+				break;
+		}
+
+		return point;
+	};
 
 
 	// ---------------------------------------------------------------------------------------------------------------------------
@@ -130,6 +168,13 @@ var Shapes = Shapes ? Shapes : (function() {
 		path[ 2 ] = point( half_w, half_h, origin );
 		path[ 3 ] = point( -half_w, half_h, origin );
 
+		if ( alignment !== Align.CENTER ) {
+			path[ 0 ] = align( path[ 0 ], alignment, half_w, half_h );
+			path[ 1 ] = align( path[ 1 ], alignment, half_w, half_h );
+			path[ 2 ] = align( path[ 2 ], alignment, half_w, half_h );
+			path[ 3 ] = align( path[ 3 ], alignment, half_w, half_h );
+		}
+
 		return path;
 	};
 
@@ -156,6 +201,7 @@ var Shapes = Shapes ? Shapes : (function() {
 			point = Trig.degreesRadiusToPosition( i * inc, radius );
 			point.x += origin.x;
 			point.y += origin.y;
+			if ( alignment !== Align.CENTER ) point = align( point, alignment, radius, radius );
 			path.push( point );
 		}
 
@@ -201,7 +247,7 @@ var Shapes = Shapes ? Shapes : (function() {
 	}
 
 	storeEnums( o );
-	//storeEnums( window );
+	storeEnums( window );
 
 	_ = {
 		circle: circle,
