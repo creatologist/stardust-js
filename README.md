@@ -98,11 +98,8 @@ Shapes.getPath( shape, props );
 // set resolution of a circle (how many vertices) - default value = 36
 Shapes.circleResolution( numPoints );
 
-// save ENUMS in object (CIRCLE, TRIANGLE, SQUARE, etc.)
-// in case you don't want to keep typeing out Shapes.CIRCLE, Shapes.TRIANGLE, etc
-Shapes.storeEnums( window );
-
-// Shapes ENUMS
+// Shapes ENUMS - stored in window / global scope - please comment out if you want
+// Shapes.storeEnums( window );
 Shapes. // getPath() props - ALL optional - default radius is 50
 	CIRCLE; // radius, origin, alignment, points
 	TRIANGLE; // radius, origin, alignment
@@ -118,11 +115,8 @@ Shapes. // getPath() props - ALL optional - default radius is 50
 
 ### Align (included in Shapes)
 ```javascript
-// save ENUMS in object (CENTER, TOP_LEFT, TOP, etc.)
-// in case you don't want to keep typeing out Align.CENTER, Align.TOP_LEFT, etc
-Align.storeEnums( window );
-
-// Align ENUMS
+// Align ENUMS - stored in window / global scope - please comment out if you want
+// Align.storeEnums( window );
 Align.
 	CENTER;
 	TOP_LEFT;
