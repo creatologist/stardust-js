@@ -85,6 +85,36 @@ addParticle( 100, 100 );
 addParticle( p );
 ```
 
+### Shapes (+Align)
+```javascript
+
+Shapes.getPath( shape, arguments );
+
+Shapes. // arguments
+	CIRCLE; // radius, (origin, alignment, points )
+	TRIANGLE; // radius, (origin, alignment );
+	SQUARE; // radius, (origin, alignment );
+	RECTANGLE; // width, height, (origin, alignment );
+	PENTAGON; // radius, (origin, alignment );
+	HEXAGON; // radius, (origin, alignment );
+	HEPTAGON; // radius, (origin, alignment );
+	OCTAGON; // radius, (origin, alignment );
+	NONAGON; // radius, (origin, alignment );
+	DECAGON; // radius, (origin, alignment );
+
+Align. // alignment
+	CENTER;
+	TOP_LEFT;
+	TOP;
+	TOP_RIGHT;
+	RIGHT;
+	BOTTOM_RIGHT;
+	BOTTOM;
+	BOTTOM_LEFT;
+	LEFT;
+
+
+```
 
 ### Social
 ```javascript
