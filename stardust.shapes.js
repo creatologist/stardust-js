@@ -46,6 +46,7 @@ var Align = Align ? Align : (function() {
 	// ===========================================================================================================================
 
 	var o = {
+		namespace: 'Align',
 		storeEnums: storeEnums
 	}
 
@@ -147,7 +148,7 @@ var Shapes = Shapes ? Shapes : (function() {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 	var getPath = function( shape ) {
-
+		console.log( shape );
 		if ( typeof shape === 'number' ) shape = shapes[ shape ];
 
 		var args = Array.prototype.slice.call( arguments );
@@ -247,7 +248,10 @@ var Shapes = Shapes ? Shapes : (function() {
 	// ===========================================================================================================================
 	// ===========================================================================================================================
 
+
+
 	var o = {
+		namespace : 'Shapes',
 		storeEnums: storeEnums,
 		getPath : getPath,
 		circleResolution : circleResolution,

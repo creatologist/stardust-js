@@ -373,6 +373,7 @@ var Social = Social ? Social : (function() {
 	// ===========================================================================================================================
 
 	var o = {
+		namespace : 'Social',
 		Twitter : Twitter,
 		Instagram : Instagram,
 		Facebook : Facebook,

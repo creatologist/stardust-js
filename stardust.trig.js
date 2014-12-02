@@ -179,6 +179,7 @@ var Trig = Trig ? Trig : (function() {
 
 
 	return {
+		namespace : 'Trig',
 		toRadians : toRadians,
 		toDegrees : toDegrees,
 

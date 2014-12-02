@@ -18,11 +18,82 @@
 
 var Utils = Utils ? Utils : (function() {
 
+	
+
 	// ---------------------------------------------------------------------------------------------------------------------------
 	
 	var clamp = function( val, min, max ) {
 		if ( val <= max && val >= min ) return val;
 		else return val > max ? max : min;
+	};
+
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+	var namespace = function( o, inheritor ) {
+		var conflictingItems = [],
+			type, subtype, s, name, key;
+
+		name = o.namespace || getInstanceName( o );
+
+		var evalString;
+
+		for ( key in o ) {
+
+			type = typeof o[ key ];
+			subtype = o[ key ].toString.toString();
+
+			if ( subtype.indexOf( 'function' ) !== -1 && subtype.indexOf( '[native code]' ) === -1 ) subtype = 'function';
+			else subtype = false;
+
+			s = o[ key ].toString();
+
+			//console.log( key, s, type, subtype );
+
+			if ( key != 'namespace' && inheritor[ key ] === undefined && ( type == 'function' || subtype == 'function' ) ) {
+				//console.log( key );
+
+				if ( subtype == 'function' ) {
+
+					evalString = 'var ' + key + ' = ' + 'function() { return ' + name + '.' + key + '.apply( this, arguments );} ';
+					eval.call( inheritor, evalString );
+
+					evalString = key + '.toString = ' + name + '.' + key + '.toString;';
+					eval.call( evalString );
+				} else {
+
+					evalString = 'var ' + key + ' = ' + 'function() { return ' + name + '.' + key + '.apply( this, arguments );} ';
+					eval.call( inheritor, evalString );
+				}
+
+			} else if ( key != 'namespace' && inheritor[ key ] === undefined && type === 'object' ) {
+				//console.log( key );
+
+				evalString = 'var ' + key + ' = ' + name + '.' + key;
+				eval.call( inheritor, evalString );
+				
+			} else {
+				//console.log( key );
+				conflictingItems.push( key );
+			}
+
+
+			/*if ( inheritor[ key ] === undefined && s !== undefined && typeof s == 'string' && type === 'function' && s.indexOf( 'function' ) !== -1 ) {
+				//eval.call( inheritor, 'var ' + key + ' = ' + o[key].toString() );
+				evalString = 'var ' + key + ' = ' + 'function() { return ' + name + '.' + key + '.apply( this, arguments );} ';
+
+				//console.log( func );
+				eval.call( inheritor, evalString );
+			} else {
+				conflictingItems.push( key );
+			}*/
+		}
+
+		if ( conflictingItems.length > 0 ) {
+			console.log( '[Utils.namespace] skipped items for ' + name );
+			console.log( conflictingItems );
+		}
+		return conflictingItems;
 	};
 
 
@@ -343,13 +414,36 @@ var Utils = Utils ? Utils : (function() {
 			if ( !is( vars[i], name ) ) return false;
 		}
 
-
 		return true;
+	};
+
+
+	var getInstanceName = function( o ) { 
+	   var funcNameRegex = /function (.{1,})\(/;
+	   var results = (funcNameRegex).exec(( o ).constructor.toString());
+	   return (results && results.length > 1) ? results[1] : "";
 	};
 
 
 	// ===========================================================================================================================
 	// ===========================================================================================================================
+
+	/*var Utils = function Utils() {};
+
+	var o = new Utils();
+		o.clamp = clamp;
+		o.dpi = dpi;
+		o.calculateDPI = calculateDPI;
+		o.browserInfo = browserInfo.browser;
+		o.orientation = orientation;
+		o.map = map;
+		o.random = random;
+		o.ratio = ratio;
+		o.overload = overload;
+		o.namespace = namespace;
+		o.getInstanceName = getInstanceName;*/
+
+
 
 	var o = {
 		clamp : clamp,
@@ -360,8 +454,8 @@ var Utils = Utils ? Utils : (function() {
 		map : map,
 		random : random,
 		ratio : ratio,
-		overload : overload
-
+		overload : overload,
+		namespace : namespace
 	};
 
 	o.orientation.toString = function() {
@@ -374,6 +468,10 @@ var Utils = Utils ? Utils : (function() {
 
 	o.dpi.toString = function() {
 		return dpi();
+	};
+
+	o.namespace.toString = function() {
+		return 'Utils';
 	};
 
 	return o;
