@@ -96,6 +96,9 @@ var APP = (function() {
 		// instead of Utils.random.flipCoin();
 		var bool = random.flipCoin();
 		
+		// instead of Utils.map();
+		var val = map( .2, 0, 1, 200, 800 );
+		
 		// instead of Shapes.getPath( CIRCLE, 100 );
 		var path = getPath( CIRCLE, 100 );
 		
