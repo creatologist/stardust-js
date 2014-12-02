@@ -2,7 +2,7 @@
 Slowly building up this library with stuff I find useful.
 
 ### DISCLAIMER
-Some of this stuff isn't for the faint of heart! Especially Utils.overload() and Utils.namespace(). I'm exploring different patterns out of curiousity. I've kept them in here for others that are brave and/or curious.. and because I'll still use it for fun. Cheers!
+Some of this stuff isn't for the faint of heart! Especially Utils.namespace(). I'm exploring different patterns out of curiousity. I've kept them in here for others that are brave and/or curious.. and because I'll still use it for fun. Cheers!
 
 
 ### Trig
