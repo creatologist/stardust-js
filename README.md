@@ -91,7 +91,6 @@ addParticle( p );
 ### Utils.namespace() - Use Namespace (like in C++)
 ```javascript
 var APP = (function() {
-
 	var init = function() {
 		
 		// instead of Utils.random.flipCoin();
@@ -105,7 +104,6 @@ var APP = (function() {
 	};
 
 	// =================================================================
-
 	var o = {};
 	o.init = init;
 	
@@ -115,7 +113,6 @@ var APP = (function() {
 	Utils.namespace( Trig, o );
 
 	return o;
-
 })();
 ```
 
