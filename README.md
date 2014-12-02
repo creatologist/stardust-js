@@ -94,16 +94,16 @@ var APP = (function() {
 	var init = function() {
 		
 		// instead of Utils.random.flipCoin();
-	        var bool = random.flipCoin();
+		var bool = random.flipCoin();
 	
-	        // instead of Utils.map();
-	        var val = map( .2, 0, 1, 200, 800 );
+		// instead of Utils.map();
+		var val = map( .2, 0, 1, 200, 800 );
 	
-	        // instead of Shapes.getPath( CIRCLE, 100 );
-	        var path = getPath( CIRCLE, 100 );
+		// instead of Shapes.getPath( CIRCLE, 100 );
+		var path = getPath( CIRCLE, 100 );
 	
-	        // instead of Trig.Point
-	        var p = new Point( 100, 100 );
+		// instead of Trig.Point
+		var p = new Point( 100, 100 );
 	
 		console.log( bool );
 		console.log( val );
