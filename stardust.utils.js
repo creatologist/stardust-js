@@ -30,11 +30,88 @@ var Utils = Utils ? Utils : (function() {
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
+
+	var createNamespaceManager = function( inheritor ) {
+
+		var func = function () {
+
+			var items = [];
+
+			var self;
+
+			var add = function add( giver, key ) {
+				if ( !items[ giver ] ) items[ giver ] = [];
+				
+				items[ giver ].push( key );
+				
+			};
+
+			var removeAll = function() {
+				var i, evalString;
+
+				for ( key in items ) {
+					for ( i = items[ key ].length; i--; ) {
+						evalString = 'delete ' + items[ key ][ i ] + ';';
+						eval.call( self, evalString );
+					}
+				}
+
+				items = [];
+			};
+
+			var remove = function remove( giver ) {
+				var name = giver.namespace || Utils.getInstanceName( giver );
+				var evalString;
+
+				for ( var i = items[ name ].length; i--; ) {
+					evalString = 'delete ' + items[ name ][ i ] + ';';
+					eval.call( self, evalString );
+				}
+
+				var index = items.indexOf( name );
+
+				if (index > -1) {
+					items.splice( index, 1 );
+				}
+			};
+
+			var o = {
+				remove : remove,
+				removeAll : removeAll,
+				add : add,
+				get : function() {
+					return this;
+				},
+				inheritor : function( i ) {
+					self = i;
+					//self.namespaceManager = o;
+				}
+			}
+
+			return o;
+
+		};
+
+		var evalString = 'var namespaceManager = (' + func.toString() + ')();';
+		eval.call( inheritor, evalString );
+		
+		inheritor.namespaceManager = function() {
+			this.namespaceManager = namespaceManager;
+		};
+	}
+
 	var namespace = function( o, inheritor ) {
 		var conflictingItems = [],
 			type, subtype, s, name, key;
 
 		name = o.namespace || getInstanceName( o );
+
+		if ( !inheritor.namespaceManager ) {
+			createNamespaceManager( inheritor );
+			inheritor.namespaceManager();
+		}
+
+		//console.log( inheritor.namespaceManager );
 
 		var evalString;
 
@@ -66,11 +143,15 @@ var Utils = Utils ? Utils : (function() {
 					eval.call( inheritor, evalString );
 				}
 
+				inheritor.namespaceManager.add( name, key );
+
 			} else if ( key != 'namespace' && inheritor[ key ] === undefined && type === 'object' ) {
 				//console.log( key );
 
 				evalString = 'var ' + key + ' = ' + name + '.' + key;
 				eval.call( inheritor, evalString );
+
+				inheritor.namespaceManager.add( name, key );
 				
 			} else {
 				//console.log( key );

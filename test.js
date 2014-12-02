@@ -24,13 +24,28 @@ var Test = Test ? Test : (function() {
 	
 	var init = function() {
 
-		// namespacing works !! :)
-		console.log( random.flipCoin() );
-		console.log( browserInfo );
-		console.log( getPath( TRIANGLE, 100 ) );
+		// instead of Utils.random.flipCoin();
+        var bool = random.flipCoin();
 
-		var p = new Point( 100, 100 );
+        // instead of Utils.map();
+        var val = map( .2, 0, 1, 200, 800 );
+
+        // instead of Shapes.getPath( CIRCLE, 100 );
+        var path = getPath( CIRCLE, 100 );
+
+        // instead of Trig.Point
+        var p = new Point( 100, 100 );
+
+		console.log( bool );
+		console.log( val );
+		console.log( path );
 		console.log( p );
+
+		// remove all namespaces - namespaceManager gets added
+		namespaceManager.removeAll();
+		// namespaceManager.remove( Utils );
+		// namespaceManager.remove( Shapes );
+		// namespaceManager.remove( Trig );
 
 	};
 
