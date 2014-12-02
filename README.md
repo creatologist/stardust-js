@@ -89,6 +89,8 @@ addParticle( p );
 ```
 
 ### Utils.namespace() - Use Namespace (like in C++)
+Disclaimer: This is not for the faint of heart! If you're already used to C++ and/or working on a personal project - this might be fun for you too! Just wanted to see if I can get this working in JS and definitely going to explore this more.
+
 ```javascript
 var APP = (function() {
 	var init = function() {
@@ -110,7 +112,7 @@ var APP = (function() {
 		console.log( path );
 		console.log( p );
 	
-		// remove all namespaces
+		// remove all namespaces if you need
 		namespaceManager.removeAll();
 		// namespaceManager.remove( Utils );
 		// namespaceManager.remove( Shapes );
