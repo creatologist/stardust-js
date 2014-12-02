@@ -104,8 +104,9 @@ var APP = (function() {
 	};
 
 	// =================================================================
-	var o = {};
-	o.init = init;
+	var o = {
+		init: init
+	};
 	
 	// use namespace / inherit
 	Utils.namespace( Utils, o );
