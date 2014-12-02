@@ -50,7 +50,8 @@ Utils.
 
 	random.flipCoin(); // true or false
 	random.pick( array ); // get random array item
-
+	
+	// detailed examples of these below
 	overload( funcs ); // overload functions - like in C++
 	namespace( giver, inheritor ); // inherit functions + objects from giver - like "use namespace" in C++
 
