@@ -122,7 +122,7 @@ var APP = (function() {
 		init: init
 	};
 	
-	// use namespace - this adds namespaceManager for private / public use
+	// use namespaces - this adds namespaceManager for private / public use
 	// to utilize in your own objects you need to add property "namespace" = variable name
 	Utils.namespace( Utils, o );
 	Utils.namespace( Shapes, o );
