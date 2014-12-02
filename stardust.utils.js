@@ -89,10 +89,10 @@ var Utils = Utils ? Utils : (function() {
 			}*/
 		}
 
-		if ( conflictingItems.length > 0 ) {
+		/*if ( conflictingItems.length > 0 ) {
 			console.log( '[Utils.namespace] skipped items for ' + name );
 			console.log( conflictingItems );
-		}
+		}*/
 		return conflictingItems;
 	};
 
