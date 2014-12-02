@@ -56,7 +56,7 @@ var Test = Test ? Test : (function() {
 		init : init
 	};
 
-	// use namespace - this adds namespaceManager
+	// use namespace - this adds namespaceManager for private / public use
 	Utils.namespace( Utils, o );
 	Utils.namespace( Shapes, o );
 	Utils.namespace( Trig, o );
