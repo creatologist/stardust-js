@@ -1,5 +1,8 @@
 #StardustJS
-Slowly building up this library with stuff I find useful. Maybe you'll find it useful too! :)
+Slowly building up this library with stuff I find useful.
+
+### DISCLAIMER
+Some of this stuff isn't for the faint of heart! Especially Utils.overload() and Utils.namespace(). I'm exploring different patterns out of curiousity. I've kept them in here for others that are brave and/or curious.. and because I'll still use it for fun. Cheers!
 
 
 ### Trig
@@ -89,7 +92,7 @@ addParticle( p );
 ```
 
 ### Utils.namespace() - Use Namespace (like in C++)
-Disclaimer: This is not for the faint of heart! If you're already used to C++ and/or working on a personal project - this might be fun for you too! Just wanted to see if I can get this working in JS and definitely going to explore this more.
+DISCLAIMER: If you're already used to C++ and/or working on a personal project - this might be fun for you too! Code readability may suffer for projects maintained by multiple developers.
 
 ```javascript
 var APP = (function() {
@@ -112,7 +115,7 @@ var APP = (function() {
 		console.log( path );
 		console.log( p );
 	
-		// remove all namespaces if you need
+		// remove all namespaces if you want
 		namespaceManager.removeAll();
 		// namespaceManager.remove( Utils );
 		// namespaceManager.remove( Shapes );
@@ -124,8 +127,9 @@ var APP = (function() {
 		init: init
 	};
 	
-	// use namespaces - this adds namespaceManager for private / public use
+	// use namespaces - this adds namespaceManager for private + public use
 	// to utilize in your own objects you need to add property "namespace" = variable name
+	// only pulls in functions and objects
 	Utils.namespace( Utils, o );
 	Utils.namespace( Shapes, o );
 	Utils.namespace( Trig, o );
