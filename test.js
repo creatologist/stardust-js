@@ -41,7 +41,7 @@ var Test = Test ? Test : (function() {
 		console.log( path );
 		console.log( p );
 
-		// remove all namespaces - namespaceManager gets added
+		// remove all namespaces
 		namespaceManager.removeAll();
 		// namespaceManager.remove( Utils );
 		// namespaceManager.remove( Shapes );
@@ -56,7 +56,7 @@ var Test = Test ? Test : (function() {
 		init : init
 	};
 
-	// use namespace
+	// use namespace - this adds namespaceManager
 	Utils.namespace( Utils, o );
 	Utils.namespace( Shapes, o );
 	Utils.namespace( Trig, o );
