@@ -29,6 +29,9 @@ var Test = Test ? Test : (function() {
 		console.log( browserInfo );
 		console.log( getPath( TRIANGLE, 100 ) );
 
+		var p = new Point( 100, 100 );
+		console.log( p );
+
 	};
 
 
@@ -45,6 +48,7 @@ var Test = Test ? Test : (function() {
 	// use namespace
 	Utils.namespace( Utils, o );
 	Utils.namespace( Shapes, o );
+	Utils.namespace( Trig, o );
 
 	o.init = init;
 
