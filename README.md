@@ -111,7 +111,8 @@ var APP = (function() {
 		init: init
 	};
 	
-	// use namespace / inherit
+	// use namespace
+	// to utilize in your own objects you need the property "namespace" = variable name
 	Utils.namespace( Utils, o );
 	Utils.namespace( Shapes, o );
 	Utils.namespace( Trig, o );
