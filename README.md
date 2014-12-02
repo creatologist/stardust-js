@@ -48,11 +48,12 @@ Utils.
 	random.flipCoin(); // true or false
 	random.pick( array ); // get random array item
 
-	overload( funcs ); // overload functions
+	overload( funcs ); // overload functions - like in C++
+	namespace( giver, inheritor ); // inherit functions + objects from giver - like "use namespace" in C++
 
 ```
 
-### Utils.overload() - Overloading Functions
+### Utils.overload() - Overloading Functions (like in C++)
 ```javascript
 var Particles = [];
 
@@ -85,6 +86,37 @@ var p = new Particle( 50, 50 );
 // create and/or add particles via overloaded function
 addParticle( 100, 100 );
 addParticle( p );
+```
+
+### Utils.namespace() - Use Namespace (like in C++)
+```javascript
+var APP = (function() {
+
+	var init = function() {
+		
+		// instead of Utils.random.flipCoin();
+		var bool = random.flipCoin();
+		
+		// instead of Shapes.getPath( CIRCLE, 100 );
+		var path = getPath( CIRCLE, 100 );
+		
+		// instead of Trig.Point
+		var p = new Point( 100, 100 );
+	};
+
+	// =================================================================
+
+	var o = {};
+	o.init = init;
+	
+	// use namespace / inherit
+	Utils.namespace( Utils, o );
+	Utils.namespace( Shapes, o );
+	Utils.namespace( Trig, o );
+
+	return o;
+
+})();
 ```
 
 ### Shapes
