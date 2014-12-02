@@ -92,7 +92,7 @@ addParticle( p );
 ```
 
 ### Utils.namespace() - Use Namespace (like in C++)
-DISCLAIMER: If you're already used to C++ and/or working on a personal project - this might be fun for you too! Code readability may suffer for projects maintained by multiple developers.
+DISCLAIMER: If you're already used to C++ and/or working on a personal project - this might be fun for you too! Otherwise, code readability may suffer for projects maintained by multiple developers. Womp wompp.
 
 ```javascript
 var APP = (function() {
