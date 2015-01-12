@@ -1,0 +1,263 @@
+slide {
+    width: 100%;
+    height: 100%;
+    
+    position: relative;
+    left: 0px;
+    top: 0px;
+    float: left;
+    background-color: white;
+}
+
+flag {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 50px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    /*-webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);*/
+}
+
+view {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    overflow: scroll;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+   /* -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;*/
+
+}
+
+pagination {
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0px 10px 10px 10px;
+}
+
+pagination .item {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    background-color: rgba( 0, 0, 0, .2 );
+    margin: 0 2px 0 2px;
+    border-radius: 50% 50%;
+}
+pagination .item.current {
+    background-color: rgba( 0, 0, 0, 1 );
+}
+
+
+
+console {
+    width: 80%;
+    height: 80px;
+    position: fixed;
+    bottom: 80px;
+    left: 10%;
+    background-color: rgba(0, 0, 0, .6);
+    color: white;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 10px;
+    line-height: 12px;
+    text-transform: lowercase;
+}
+
+
+
+
+/* ==================================================================== */
+
+
+
+front, back {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    -webkit-backface-visibility: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/*front, back {
+    text-align: center;
+    font-size: 100px;
+    padding-top: 210px;
+}*/
+
+card {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+    
+}
+
+front {
+    background-color: red;
+}
+
+back {
+    background-color: blue;
+    -webkit-transform: rotateY( 180deg );
+    transform: rotateY( 180deg );
+}
+
+
+
+app, views {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+app {
+    -webkit-perspective: 800px;
+    perspective: 800px;
+
+    background-color:#FFF;
+    background-image:linear-gradient(top, #FFF 0%, #FFF 51%, #608f8b 100%);
+    background-image:-webkit-linear-gradient(top, #FFF 0%, #FFF 51%, #608f8b 100%);
+    background-image:-ms-linear-gradient(top, #FFF 0%, #FFF 51%, #608f8b 100%);
+    background-image:-webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, #FFF),
+        color-stop(0.51, #FFF),
+        color-stop(1, #608f8b)
+    );
+    
+}
+
+views {
+    /*-webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;*/
+}
+
+/*slides {
+    width: 100%;
+    
+    left: 0px;
+    top: 0px;
+    background-color: white;
+}*/
+
+toucharea, toucharea[data-scroll=horizontal], toucharea[data-scroll=vertical] {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    float: left;
+    overflow: hidden;
+    background-color: #adc9c6;
+}
+
+toucharea {
+    width: 100%;
+    height: 100px;
+}
+
+toucharea[data-scroll=horizontal] {
+    width: 100%;
+    height: 80px;
+}
+
+toucharea[data-scroll=vertical] {
+    width: 100%;
+    height: 120px;
+}
+
+toucharea .ta-scrollbar {
+    background-color: black;
+}
+
+toucharea .ta-scrollbar-container {
+    background-color: rgba( 0, 0, 0, .3 );
+}
+
+
+toucharea .ta-scrollbar {
+    background-color: rgba( 255, 255, 255, .3 );
+    /*border-radius: 2px 2px;*/
+}
+
+toucharea .ta-scrollbar-container {
+    background-color: rgba( 255, 255, 255, .3 );
+}
+
+
+
+toucharea .ta-scrollbar-horz {
+    height: 4px;
+}
+
+toucharea .ta-scrollbar-container-horz {
+    height: 4px;
+}
+
+
+
+toucharea .ta-scrollbar-vert {
+    width: 4px;
+}
+
+toucharea .ta-scrollbar-container-vert {
+    width: 4px;
+}
+
+touchcontent {
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+
+
+
+
+
+
+
+
+
+
