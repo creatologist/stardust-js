@@ -133,8 +133,6 @@ var Mobile = Mobile ? Mobile : (function() {
 
 		//
 
-		this.touchListener = touchListener;
-
 		this.init();
 	};
 
@@ -203,7 +201,6 @@ var Mobile = Mobile ? Mobile : (function() {
 			this.$el.css( { overflow: 'visible' } );
 
 			//document.addEventListener( 'touchstart', this._onTouchStart.bind( this ), true);
-			//this.touchListener = touchListener;
 
 			document.addEventListener( 'touchstart', this.onTouchStart.bind( this ), true);
 			document.addEventListener( 'touchend', this.onTouchEnd.bind( this ), true);
@@ -474,16 +471,27 @@ var Mobile = Mobile ? Mobile : (function() {
 		this.$el = $( id_ );
 		this.slides = false;
 
+		//this.$content = false;
+		
+
 		this.slidesArr = [];
 		this.touchAreaArr = [];
 
 		this.params = {
 			scrolling: false,
-			autoTouchAreas: false
+			autoTouchAreas: false,
+			pulldown: false,
+			pulldownLimit: 100
 		};
 
 		this.$card = false;
 		this.front = true;
+
+		this.scroll = {
+			top: 0,
+			left: 0,
+			height: 0
+		};
 
 		this.flipType = 0;
 
@@ -496,6 +504,33 @@ var Mobile = Mobile ? Mobile : (function() {
 			this.params[ key ] = params_[ key ];
 		}
 
+		if ( this.$el.find( 'scrollcontent' ).length > 0 ) {
+			this.params.scrolling = true;
+			this.$content = this.$el.find( 'scrollcontent' );
+
+			var $content = this.$content;
+			this.$content.bind( 'touchstart', function() {
+				$content.stop( true );
+			});
+
+			if ( this.$content.attr( 'data-pulldown' ) == 'true' ) this.params.pulldown = true;
+
+			this.scroll.height = this.$el[0].scrollHeight - this.$el.height();
+			this.scroll.max = this.$el.height() * .5;
+
+			if ( this.$el.find( 'pulldown' ).length > 0 ) {
+				this.$pulldown = this.$el.find( 'pulldown' );
+				this.params.pulldown = true;
+				this.params.pulldownLimit = this.$pulldown.height();
+				
+				if ( this.params.pulldownLimit == 0 && this.$pulldown.css( 'position' ) == 'relative' ) this.params.pulldownLimit = this.$pulldown.actual( 'height', { position: 'relative' } );
+				console.log( this.params.pulldownLimit );
+			}
+
+		}
+
+		touchListener.on( 'update', this._onUpdate.bind( this ) );
+
 		this.init();
 		//this.setAnimateIn( .4, { alpha: 1 } );
 		//this.setAnimateOut( .4, { alpha: 0 } );
@@ -504,6 +539,161 @@ var Mobile = Mobile ? Mobile : (function() {
 
 	View.prototype = {
 		controller: null,
+		on: function( event_, func_, bypass_ ) {
+			if ( bypass_ !== 'bypass' ) {
+				var split = event_.split( ' ' );
+				if ( split.length > 1 ) {
+					for ( var i = 0, len = split.length; i < len; i++ ) {
+						this.on( split[ i ], func_, 'bypass' );
+					}
+					return;
+				}
+			}
+
+			switch( event_ ) {
+				case 'pulldown':
+					this.onPulldown( func_ );
+					break;
+				case 'pulldown-start':
+					this.onPulldownStart( func_ );
+					break;
+				case 'pulldown-hit':
+					this.onPulldownHit( func_ );
+					break;
+				case 'pulldown-end':
+					this.onPulldownEnd( func_ );
+					break;
+			}
+		},
+		_onPulldown: false,
+		onPulldown: function( func_ ) {
+			this._onPulldown = func_;
+		},
+		_onPulldownHit: false,
+		onPulldownHit: function( func_ ) {
+			this._onPulldownHit = func_;
+		},
+		_onPulldownEnd: false,
+		onPulldownEnd: function( func_ ) {
+			this._onPulldownEnd = func_;
+		},
+		_onPulldownStart: false,
+		onPulldownStart: function( func_ ) {
+			this._onPulldownStart = func_;
+		},
+		_pulldownHit: false,
+		_pulldownStart: false,
+		_onUpdate: function( e ) {
+			if ( !this._active || e.userOnSlide ) return;
+			
+
+			if ( this.params.scrolling ) {
+				//console.log( 'active - ' + this.id + ' - ' + Math.random() );
+				var newTop = this.scroll.top + e.touch.dy;
+
+				if ( e.touchEvent == 'touchmove' ) {
+
+					if ( !this.params.pulldown ) {
+						if ( newTop > 0 ) newTop = 0;
+					} else {
+						if ( newTop > this.params.pulldownLimit ) {
+							newTop = this.params.pulldownLimit;
+							if ( this._onPulldown ) this._onPulldown( {
+									top: newTop,
+									limit: this.params.pulldownLimit,
+									type: 'pulldown',
+									completed: false,
+									target: this
+								} );
+							if ( this._onPulldownHit && !this._pulldownHit ) {
+								this._pulldownHit = true;
+								this._onPulldownHit( {
+									top: newTop,
+									limit: this.params.pulldownLimit,
+									type: 'pulldown-hit',
+									completed: true,
+									target: this
+								} );
+							}
+						} else if ( newTop > 0 ) {
+							if ( this._onPulldownStart && !this._pulldownStart ) {
+								this._pulldownStart = true;
+								this._onPulldownStart( {
+									top: newTop,
+									limit: this.params.pulldownLimit,
+									type: 'pulldown-start',
+									completed: false,
+									target: this
+								} );
+							}
+							if ( this._onPulldown ) this._onPulldown( {
+									top: newTop,
+									limit: this.params.pulldownLimit,
+									type: 'pulldown',
+									completed: false,
+									target: this
+								});
+						}
+					}
+					
+					if ( newTop < -this.scroll.height ) newTop = -this.scroll.height;
+
+					this.$content.css( {
+						top: newTop
+					})
+
+
+				} else if ( e.touchEvent == 'touchend' ) {
+
+					if ( e.elapsedTime < .4 && newTop < 0 ) {
+						var self = this;
+						newTop = this.scroll.top + e.touch.dy*6;
+
+						//console.log( 'scrollheight: ' + this.scroll.height );
+						if ( newTop > 0 ) newTop = 0;
+						else if ( newTop < -this.scroll.height ) newTop = -this.scroll.height;
+
+						var delta = Math.abs( e.touch.dy*6 );
+
+						this.$content.stop( true ).animate( { top: newTop }, { duration: 1300, easing: 'easeOutQuad', step: function( now, fx ) {
+							self.scroll.top = now;
+						} });
+					} else {
+						this.scroll.top = newTop;
+					}
+
+					if ( this.params.pulldown ) {
+						var self = this;
+						if ( newTop > 0 ) this.$content.stop( true ).animate( { top: 0 }, { duration: 600, easing: 'easeOutQuint', step: function( now, fx ) {
+							self.scroll.top = now;
+						} });
+						
+						if ( this._onPulldownEnd ) {
+							if ( newTop >= this.params.pulldownLimit ) this._onPulldownEnd( {
+									top: newTop,
+									limit: this.params.pulldownLimit,
+									type: 'pulldown-end',
+									completed: true,
+									target: this
+								} );
+							else this._onPulldownEnd( {
+									top: newTop,
+									limit: this.params.pulldownLimit,
+									type: 'pulldown-end',
+									completed: false,
+									target: this
+								} );
+						}
+					}
+
+					this._pulldownHit = false;
+					this._pulldownStart = false;
+					
+					
+				}
+			}
+			
+		},
 		getTouchAreaById: function( id_ ) {
 			for ( var i = 0, len = this.touchAreaArr.length; i < len; i++ ) {
 				if ( this.touchAreaArr[ i ].id === id_ ) return this.touchAreaArr[ i ];
@@ -731,11 +921,11 @@ var Mobile = Mobile ? Mobile : (function() {
 					this.slidesArr[ i ].active( true );
 				}
 			}
-
+			this._active = true;
 			this.onActive();
 		},
 		_onInactive: function() {
-			
+			this._active = false;
 			this.onInactive();
 		},
 		onActive: function() {
@@ -947,8 +1137,9 @@ var Mobile = Mobile ? Mobile : (function() {
 
 			if ( this.params.autoHide ) {
 				if ( e.direction.y == 'up' ) {
-					//console.log( e.scroll.top );
-					if ( e.scroll.top < e.scroll.height - this.height - manager.viewport.height) this.hide();
+					//console.log( this.view.scroll.top + ' - ' + this.view.scroll.height );
+					//console.log( Math.random() );
+					if ( this.view.scroll.top > -this.view.scroll.height + this.height ) this.hide();
 					else this.show();
 				} else {
 					this.show();
@@ -1148,21 +1339,28 @@ var Mobile = Mobile ? Mobile : (function() {
 				this.scroll.dy = this.scroll.startTop - this.scroll.top;
 				this.scroll.dx = this.scroll.startLeft - this.scroll.left;
 				//console.log( '[' + this.view.id + '] ' + this.scroll.start + ' -- ' + this.scroll.top + ' -- ' + this.scroll.height );
-				if ( this.view.params.scrolling && this.elapsedTime < .4 ) {
+				/*if ( this.view.params.scrolling && this.elapsedTime < .4 ) {
 					var self = this;
-					this.view.$el.stop( true ).animate( { scrollTop: this.scroll.top - this.scroll.dy*6 }, { duration: 1500, easing: 'easeOutQuad', step: function( now, fx ) {
+					var newScrollTop = this.scroll.top - this.scroll.dy*6;
+
+					if ( newScrollTop <= 0 ) newScrollTop = 0;
+
+					this.view.$content.stop( true ).animate( { top: this.scroll.top - this.touch.dy*6 }, { duration: 1500, easing: 'easeOutQuad', step: function( now, fx ) {
 						//console.log( Math.random() );
 						//console.log( this.name );
 						//console.log( now );
 						//self.scroll.top = self.view.getScrollTop();
 						if ( now <= 0 ) self.scroll.top = 0;
 						else self.scroll.top = now;
-						if ( !self.isBusy ) self._emitUpdateEvent( 'touchend' );
+						if ( !self.isBusy ) self._emitUpdateEvent( 'touchscroll' );
 					}});
+					this._emitUpdateEvent( 'touchend' );
 				} else {
 					//console.log( 'weee' );
 					this._emitUpdateEvent( 'touchend' );
-				}
+				}*/
+
+				this._emitUpdateEvent( 'touchend' );
 
 				
 			} else {
@@ -1436,6 +1634,9 @@ var Mobile = Mobile ? Mobile : (function() {
 				case 'touchend':
 					this.onTouchEnd( func_ );
 					break;
+				case 'onscroll':
+					this.onScroll( func_ );
+					break;
 			}
 		},
 		_onTouch: false,
@@ -1474,7 +1675,10 @@ var Mobile = Mobile ? Mobile : (function() {
 			this._onSwipeDown = func_;
 			this.initGestures();
 		},
-
+		_onScroll: false,
+		onScroll: function( func_ ) {
+			this._onScroll = func_;
+		},
 		_gestures: false,
 		initGestures: function() {
 			if ( this._gestures ) return;
@@ -1541,7 +1745,7 @@ var Mobile = Mobile ? Mobile : (function() {
 				this._updateScrolling( e );
 				return;
 			} else {
-				if ( this._gestures && e.touchEvent == 'touchend' ) {
+				if ( this._gestures && e.touchEvent == 'touchend' && e.elapsedTime < 0.4 ) {
 					var dx = Math.abs( e.touch.dx ),
 						dy = Math.abs( e.touch.dy );
 
@@ -1569,12 +1773,14 @@ var Mobile = Mobile ? Mobile : (function() {
 		_updateScrollbarX: function( x_ ) {
 			this.$scrollbar.css( {
 				left: Utils.map( -x_, 0, this.scroll.width, 0, this.scrollbar.maxX )
-			})
+			});
+			if ( this._onScroll ) this._onScroll( -x_, 0 );
 		},
 		_updateScrollbarY: function( y_ ) {
 			this.$scrollbar.css( {
 				top: Utils.map( -y_, 0, this.scroll.height, 0, this.scrollbar.maxY )
-			})
+			});
+			if ( this._onScroll ) this._onScroll( 0, -y_ );
 		},
 		_updateScrolling: function( e ) {
 
@@ -1727,6 +1933,8 @@ var Mobile = Mobile ? Mobile : (function() {
 
 		document.createElement( 'toucharea' );
 		document.createElement( 'touchcontent' );
+		document.createElement( 'scrollcontent' );
+		document.createElement( 'pulldown' );
 
 		manager = new Manager();
 
