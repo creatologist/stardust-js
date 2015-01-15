@@ -223,6 +223,8 @@ var Mobile = Mobile ? Mobile : (function() {
 		onTouchStart: function( e ) {
 			//TweenMax.set( this.$el, { scale: .9 } );
 			if ( !this._active ) return;
+			TweenMax.killTweensOf( this.$slidesContainer );
+
 			if ( this.isolated ) {
 				
 				var offset = this.$clipper.offset();
@@ -478,10 +480,11 @@ var Mobile = Mobile ? Mobile : (function() {
 		this.touchAreaArr = [];
 
 		this.params = {
-			scrolling: false,
-			autoTouchAreas: false,
-			pulldown: false,
-			pulldownLimit: 100
+			scrolling: 		false,
+			touchAreas: 	false,
+			pulldown: 		false,
+			pulldownLimit: 	100,
+			modal: 			false
 		};
 
 		this.$card = false;
@@ -527,17 +530,23 @@ var Mobile = Mobile ? Mobile : (function() {
 				console.log( this.params.pulldownLimit );
 			}
 
+		} else {
+			document.addEventListener( 'touchstart', this._onTouchStart.bind( this ), true);
 		}
+
 
 		touchListener.on( 'update', this._onUpdate.bind( this ) );
 
 		this.init();
 		//this.setAnimateIn( .4, { alpha: 1 } );
 		//this.setAnimateOut( .4, { alpha: 0 } );
-		//this.animateInParams.params.onComplete = this.animateInComplete.bind( this );
+		//this.animateInParams.params.onComplete = this.showComplete.bind( this );
 	};
 
 	View.prototype = {
+		_onTouchStart: function( e ) {
+			e.preventDefault();
+		},
 		controller: null,
 		on: function( event_, func_, bypass_ ) {
 			if ( bypass_ !== 'bypass' ) {
@@ -550,20 +559,28 @@ var Mobile = Mobile ? Mobile : (function() {
 				}
 			}
 
+			var custom = false;
+
 			switch( event_ ) {
 				case 'pulldown':
 					this.onPulldown( func_ );
+					custom = true;
 					break;
 				case 'pulldown-start':
 					this.onPulldownStart( func_ );
+					custom = true;
 					break;
 				case 'pulldown-hit':
 					this.onPulldownHit( func_ );
+					custom = true;
 					break;
 				case 'pulldown-end':
 					this.onPulldownEnd( func_ );
+					custom = true;
 					break;
 			}
+
+			if ( !custom ) this.$el.on( event_, func_ );
 		},
 		_onPulldown: false,
 		onPulldown: function( func_ ) {
@@ -584,7 +601,14 @@ var Mobile = Mobile ? Mobile : (function() {
 		_pulldownHit: false,
 		_pulldownStart: false,
 		_onUpdate: function( e ) {
+			/*var override = false;
+			if ( e.modalVisible === this ) {
+				if ( !this._active || e.userOnSlide ) return;
+			} else if ( !this._active || e.userOnSlide || e.modalVisible ) return;*/
+
 			if ( !this._active || e.userOnSlide ) return;
+			//console.log( e.modalVisible );
+			//console.log( 'update - ' + this.id );
 			
 
 			if ( this.params.scrolling ) {
@@ -650,12 +674,33 @@ var Mobile = Mobile ? Mobile : (function() {
 						newTop = this.scroll.top + e.touch.dy*6;
 
 						//console.log( 'scrollheight: ' + this.scroll.height );
-						if ( newTop > 0 ) newTop = 0;
-						else if ( newTop < -this.scroll.height ) newTop = -this.scroll.height;
+
+						//if ( newTop > 0 ) newTop = 0;
+						//else if ( newTop < -this.scroll.height ) newTop = -this.scroll.height;
 
 						var delta = Math.abs( e.touch.dy*6 );
 
-						this.$content.stop( true ).animate( { top: newTop }, { duration: 1300, easing: 'easeOutQuad', step: function( now, fx ) {
+						var duration;
+						var easing = 'easeOutQuad';
+						if ( newTop < 0 && newTop > -this.scroll.height ) duration = 1300;
+						else {
+							var minDuration = 300,
+								maxDuration = 1300;
+
+							if ( newTop > 0 ) {
+								duration = Utils.map( newTop, 0, delta, minDuration, 1300, true );
+								newTop = 0;
+								easing = 'easeOutBack';
+							} else if ( newTop < -this.scroll.height ) {
+								duration = Utils.map( Math.abs( newTop ) - Math.abs( this.scroll.height ), this.scroll.height - delta, this.scroll.height, minDuration, 1300, true );
+								newTop = -this.scroll.height;
+								easing = 'easeOutBack';
+							}
+						}
+
+						console.log( duration );
+
+						this.$content.stop( true ).animate( { top: newTop }, { duration: duration, easing: easing, step: function( now, fx ) {
 							self.scroll.top = now;
 						} });
 					} else {
@@ -752,7 +797,7 @@ var Mobile = Mobile ? Mobile : (function() {
 				}
 			}
 
-			if ( this.params.autoTouchAreas === true && this.$el.find( 'toucharea' ).length > 0 ) {
+			if ( this.params.touchAreas === true && this.$el.find( 'toucharea' ).length > 0 ) {
 				var tempArr = this.$el.find( 'toucharea' );
 				var $touchArea;
 
@@ -771,10 +816,20 @@ var Mobile = Mobile ? Mobile : (function() {
 			this.touchAreaArr.push( ta_ );
 		},
 
-		flip: function() {
+		setFlipType: function( n_ ) {
+			this.flipType = n_;
+		},
+
+		flip: function( callback_ ) {
 			if ( !this.$card ) return;
+			this._flipCallback = callback_;
 
 			this[ 'flip' + this.flipType ]();
+		},
+
+		flipCallback: function() {
+			if ( this._flipCallback ) this._flipCallback();
+			this._flipCallback = false;
 		},
 
 		flip0: function() {
@@ -782,13 +837,13 @@ var Mobile = Mobile ? Mobile : (function() {
 				var tl = new TimelineMax();
 				tl.to( this.$card, .2, { scale: .95  } );
 				tl.to( this.$card, .5, { rotationY: 180, left: '-100%', transformOrigin: 'right center' }, '-=.2' );
-				tl.to( this.$card, .3, { scale: 1, left:-$( document ).width() }, '-=.1' );
+				tl.to( this.$card, .3, { scale: 1, left:-$( document ).width(), onComplete: this.flipCallback.bind( this ) }, '-=.1' );
 				this.front = false;
 			} else {
 				var tl = new TimelineMax();
 				tl.to( this.$card, .2, { scale: .95  } );
 				tl.to( this.$card, .5, { rotationY: 0, left: '0%', transformOrigin: 'right center' }, '-=.2' );
-				tl.to( this.$card, .3, { scale: 1, left: 0 }, '-=.1' );
+				tl.to( this.$card, .3, { scale: 1, left: 0, onComplete: this.flipCallback.bind( this ) }, '-=.1' );
 				this.front = true;
 			}
 			
@@ -799,13 +854,13 @@ var Mobile = Mobile ? Mobile : (function() {
 				var tl = new TimelineMax();
 				tl.to( this.$card, .2, { scale: .5  } );
 				tl.to( this.$card, .5, { rotationY: 180, left: 0, transformOrigin: 'center center' }, '-=.2' );
-				tl.to( this.$card, .3, { scale: 1, left: 0 }, '-=.1' );
+				tl.to( this.$card, .3, { scale: 1, left: 0, onComplete: this.flipCallback.bind( this ) }, '-=.1' );
 				this.front = false;
 			} else {
 				var tl = new TimelineMax();
 				tl.to( this.$card, .2, { scale: .5  } );
 				tl.to( this.$card, .5, { rotationY: 0, left: 0, transformOrigin: 'center center' }, '-=.2' );
-				tl.to( this.$card, .3, { scale: 1, left: 0 }, '-=.1' );
+				tl.to( this.$card, .3, { scale: 1, left: 0, onComplete: this.flipCallback.bind( this ) }, '-=.1' );
 				this.front = true;
 			}
 		},
@@ -828,93 +883,14 @@ var Mobile = Mobile ? Mobile : (function() {
 		},
 
 		animateInView: null,
+		setActive: function( bool_ ) {
+			this._active = bool_;
 
-		/*animateInParams: {
-			duration: .4,
-			params: {
-				alpha: 1
-			}
+			if ( bool_ ) this._onActive();
+			else this._onInactive();
 		},
-
-		animateOutParams: {
-			duration: .4,
-			params: {
-				alpha: 0
-			},
-			animateInView: false
-		},
-
-		setAnimateIn: function( duration_, params_, callback_ ) {
-			if ( typeof duration_ == 'function' ) {
-				
-				this.animateInParams.params.onComplete = function() {
-					this.controller.setCurrentView( this );
-					callback_();
-				}.bind( this );
-			} else {
-				if ( typeof duration_ == 'number' ) this.animateInParams.duration = duration_;
-				//if ( typeof params_ == 'object' ) this.animateInParams.params = params_;
-				if ( callback_ && typeof callback_ == 'function' ) {
-					
-					this.animateInParams.params.onComplete = function() {
-						this.controller.setCurrentView( this );
-						callback_();
-					}.bind( this );
-				} else {
-					var self = this;
-
-					this.animateInParams.params.onComplete = this.animateInComplete.bind( this );
-				}
-			}
-		},
-
-		setAnimateOut: function( duration_, params_, callback_ ) {
-			if ( typeof duration_ == 'function' ) {
-				var callback = duration_;
-				this.animateOutParams.params.onComplete = function() {
-					if ( this.animateOutParams.animateInView ) this.animateOutParams.animateInView.animateIn();
-					callback();
-				}.bind( this );
-			} else {
-				//console.log( typeof params_ );
-				if ( typeof duration_ == 'number' ) this.animateOutParams.duration = duration_;
-				if ( typeof params_ == 'object' ) this.animateOutParams.params = params_;
-				if ( typeof callback_ == 'function' ) {
-					var callback = callback_;
-					this.animateOutParams.params.onComplete = function() {
-						if ( this.animateOutParams.animateInView ) this.animateOutParams.animateInView.animateIn();
-						callback();
-					}.bind( this );
-				} else {
-					
-					this.animateOutParams.params.onComplete = function() {
-						if ( this.animateOutParams.animateInView ) this.animateOutParams.animateInView.animateIn();
-					}
-				}
-			}
-		},
-
-		animateInComplete: function() {
-			//console.log( 'yayyy', true );
-			console.log( '>> [' + this.index + '] ' + this.id, true );
-			this.controller.setCurrentView( this );
-		},
-		animateOutComplete: function() {
-			if ( this.animateOutParams.animateInView ) this.animateOutParams.animateInView.animateIn();
-		},
-		animateIn: function( callback_ ) {
-			//console.log( 'animIn - ' + Math.random() );
-			console.log( 'animIn - ' + this.id, true );
-			TweenMax.to( this.$el, this.animateInParams.duration, this.animateInParams.params );
-			//TweenMax.to( this.$el, this.animateInParams.duration, { alpha: 1, onComplete: this.animateInComplete.bind( this ) } );
-			console.log( 'index - ' + this.index, true );
-		},
-		animateOut: function( callback_ ) {
-			//console.log( 'animOut - ' + Math.random() );
-			TweenMax.to( this.$el, this.animateOutParams.duration, this.animateOutParams.params );
-			//TweenMax.to( this.$el, this.animateOutParams.duration, this.animateOutParams.params );
-		}*/
 		_onActive: function() {
+
 			if ( this.slides ) this.slides.active( true );
 			else {
 				for ( var i = 0; i < this.slidesArr.length; i++ ) {
@@ -926,6 +902,14 @@ var Mobile = Mobile ? Mobile : (function() {
 		},
 		_onInactive: function() {
 			this._active = false;
+
+			if ( this.slides ) this.slides.active( false );
+			else {
+				for ( var i = 0; i < this.slidesArr.length; i++ ) {
+					this.slidesArr[ i ].active( false );
+				}
+			}
+
 			this.onInactive();
 		},
 		onActive: function() {
@@ -934,32 +918,39 @@ var Mobile = Mobile ? Mobile : (function() {
 		onInactive: function() {
 
 		},
-		animateInComplete: function() {
+		showComplete: function() {
 			//console.log( 'yayyy', true );
 			console.log( 'in complete >> [' + this.index + '] ' + this.id, true );
 			//console.log( 'animate in complete' );
-			this.controller.setCurrentView( this );
+			if ( !this.params.modal ) this.controller.setCurrentView( this );
 			this.$el.focus();
 			this._onActive();
 		},
-		animateOutComplete: function() {
-			console.log( 'OUT COMPLETE' );
+		hideComplete: function() {
+			//console.log( 'OUT COMPLETE' );
 			if ( this.animateInView ) this.animateInView.animateIn();
-			this.hide();
+			//this.hide();
 			this._onInactive();
 		},
 		onHide: function() {
-			TweenMax.to( this.$el, .35, { alpha: 0, onComplete: function() {
-				this.animateOutComplete();
+			//this.$el.hide();
+			//this.hideComplete();
+			this.hide();
+			return;
+			TweenMax.to( this.$el, .5, { alpha: 0, onComplete: function() {
+				this.hideComplete();
 			}.bind( this ) } );
 		},
 		onShow: function() {
-			TweenMax.to( this.$el, .35, { alpha: 1, onComplete: function() {
-				this.animateInComplete();
+			//this.$el.show();
+			//this.showComplete();
+			this.show();
+			return;
+			TweenMax.to( this.$el, .5, { alpha: 1, onComplete: function() {
+				this.showComplete();
 			}.bind( this ) } );
 		},
 		animateIn: function() {
-			this.show();
 			this.$el.focus();
 			this.onShow();
 		},
@@ -974,15 +965,20 @@ var Mobile = Mobile ? Mobile : (function() {
 			this.onHide();
 		},
 		show: function() {
-			this.$el.css( 'display', 'block' );
+			//this.$el.css( 'display', 'block' );
+			this.$el.show();
+			this.showComplete();
 		},
 		hide: function() {
-			this.$el.css( 'display', 'none' );
+			console.log( 'hide - ' + this.id );
+			this.$el.hide();
+			this.hideComplete();
 		}
 	};
 
 	var ViewController = function ViewController() {
 		this.viewsArr = [];
+		this.modalsArr = [];
 		this.currentView = false;
 	};
 
@@ -1010,11 +1006,24 @@ var Mobile = Mobile ? Mobile : (function() {
 			}
 			return v;
 		},
+		createModal: function( id_, params_ ) {
+			var params = params_ || {};
+				params.modal = true;
+
+			var m = new View( id_, params );
+			m.controller = this;
+			m.index = this.modalsArr.length;
+
+			this.modalsArr.push( m );
+
+			return m;
+		},
 		getCurrentView: function() {
 			return this.currentView;
 		},
 		changeView: function( v_, animateBoth_ ) {
-			console.log( this.currentView.index + " -> " + v_.index );
+			if ( this.currentView === v_ ) return;
+			//console.log( this.currentView.index + " -> " + v_.index );
 			if ( animateBoth_ === true ) {
 				//this.currentView.setAnimateInView( false );
 				this.currentView.animateInView = false;
@@ -1033,6 +1042,47 @@ var Mobile = Mobile ? Mobile : (function() {
 		},
 		setCurrentView: function( v_ ) {
 			this.currentView = v_;
+		},
+		lastViewBeforeModal: false,
+		currentModal: false,
+		modalVisible: false,
+		saveHideCurrentView: false,
+		showModal: function( m_, hideCurrentView_ ) {
+			if ( this.modalVisible === m_ ) return;
+			this.currentModal = m_;
+			this.modalVisible = m_;
+
+			if ( hideCurrentView_ ) this.currentView.animateOut();
+			else this.currentView.setActive( false );
+
+			if ( this._onShowModal ) this._onShowModal();
+			m_.animateIn();
+
+		},
+		hideModal: function( m_ ) {
+			this.modalVisible = false;
+			if ( this._onHideModal ) this._onHideModal();
+			this.currentView.setActive( true );
+			m_.animateOut();
+		},
+		on: function( event_, func_ ) {
+			console.log( event_ );
+			switch( event_ ) {
+				case 'showmodal':
+					this.onShowModal( func_ );
+					break;
+				case 'hidemodal':
+					this.onHideModal( func_ );
+					break;
+			}
+		},
+		_onShowModal: false,
+		onShowModal: function( func_ ) {
+			this._onShowModal = func_;
+		},
+		_onHideModal: false,
+		onHideModal: function( func_ ) {
+			this._onHideModal = func_;
 		}
 	};
 
@@ -1062,10 +1112,16 @@ var Mobile = Mobile ? Mobile : (function() {
 			this.createView = this.viewController.createView;
 			this.addView = this.viewController.addView;*/
 
-			this.changeView = this.viewController.changeView.bind( this.viewController );
+			/*this.changeView = this.viewController.changeView.bind( this.viewController );
 			this.getCurrentView = this.viewController.getCurrentView.bind( this.viewController );
 			this.addView = this.viewController.addView.bind( this.viewController );
 			this.createView = this.viewController.createView.bind( this.viewController );
+			this.createModal = this.viewController.createModal.bind( this.viewController );*/
+
+			var props='changeView|getCurrentView|addView|createView|createModal|on|showModal|hideModal'.split('|'), i=0, max=props.length;
+			for(i;i<max;i++) {
+			   this[ props[ i ] ] = this.viewController[ props[ i ] ].bind( this.viewController );
+			}
 			
 		},
 		addNav: function( fn_ ) {
@@ -1139,10 +1195,10 @@ var Mobile = Mobile ? Mobile : (function() {
 				if ( e.direction.y == 'up' ) {
 					//console.log( this.view.scroll.top + ' - ' + this.view.scroll.height );
 					//console.log( Math.random() );
-					if ( this.view.scroll.top > -this.view.scroll.height + this.height ) this.hide();
-					else this.show();
+					if ( this.view.scroll.top > -this.view.scroll.height + this.height ) this._hide();
+					else this._show();
 				} else {
-					this.show();
+					this._show();
 				}
 			}
 
@@ -1163,23 +1219,23 @@ var Mobile = Mobile ? Mobile : (function() {
 			//console.log( this.view.id );
 			//console.log( this.view.$el.scrollTop() );
 		},
-		onHide: function(){
+		hide: function(){
 			this.$el.hide();
 		},
 		hidden: false,
-		hide: function() {
+		_hide: function() {
 			if ( this.hidden ) return;
 			this.hidden = true;
 
-			this.onHide();
+			this.hide();
 		},
-		show: function() {
+		_show: function() {
 			if ( !this.hidden ) return;
 			this.hidden = false;
 
-			this.onShow();
+			this.show();
 		},
-		onShow: function() {
+		show: function() {
 			this.$el.show();
 		}
 	};
@@ -1274,7 +1330,8 @@ var Mobile = Mobile ? Mobile : (function() {
 				scroll: this.scroll,
 				direction: this.direction,
 				touchEvent: touchevent_,
-				userOnSlide: this.userOnSlide
+				userOnSlide: this.userOnSlide,
+				modalVisible: manager.viewController.modalVisible
 			};
 
 			if ( touchevent_ == 'touchend' ) data.elapsedTime = this.elapsedTime;
@@ -1420,9 +1477,6 @@ var Mobile = Mobile ? Mobile : (function() {
 		touchListener = new TouchListener();
 
 	};
-
-
-
 
 
 
@@ -1917,6 +1971,7 @@ var Mobile = Mobile ? Mobile : (function() {
 		document.createElement( 'app' );
 		document.createElement( 'view' );
 		document.createElement( 'views' );
+		document.createElement( 'modal' );
 
 		document.createElement( 'pagination' );
 		document.createElement( 'console' );
@@ -1991,3 +2046,16 @@ function css(a) { var sheets = document.styleSheets, o = {}; for (var i in sheet
 
 
 
+$.fn.animatecss = function(anim, time, cb) {
+    if (time) this.css('-webkit-transition', time / 1000 + 's');
+
+    this.addClass(anim);
+
+    if ($.isFunction(cb)) {
+        setTimeout(function() {
+            $(this).each(cb);
+
+        }, (time) ? time : 250);
+    }
+    return this;
+};
