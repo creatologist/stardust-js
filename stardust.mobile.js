@@ -481,7 +481,7 @@ var Mobile = Mobile ? Mobile : (function() {
 
 		this.params = {
 			scrolling: 		false,
-			touchAreas: 	false,
+			initTouchAreas:	false,
 			pulldown: 		false,
 			pulldownLimit: 	100,
 			modal: 			false
@@ -797,7 +797,7 @@ var Mobile = Mobile ? Mobile : (function() {
 				}
 			}
 
-			if ( this.params.touchAreas === true && this.$el.find( 'toucharea' ).length > 0 ) {
+			if ( this.params.initTouchAreas == true && this.$el.find( 'toucharea' ).length > 0 ) {
 				var tempArr = this.$el.find( 'toucharea' );
 				var $touchArea;
 
