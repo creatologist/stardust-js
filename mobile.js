@@ -509,6 +509,42 @@ var Mobile = Mobile ? Mobile : (function() {
 
 		if ( this.$el.find( 'scrollcontent' ).length > 0 ) {
 			this.params.scrolling = true;
+			this.updateScrollcontent();
+
+		} else {
+			document.addEventListener( 'touchstart', this._onTouchStart.bind( this ), true);
+		}
+
+
+		touchListener.on( 'update', this._onUpdate.bind( this ) );
+
+		this.init();
+		//this.setAnimateIn( .4, { alpha: 1 } );
+		//this.setAnimateOut( .4, { alpha: 0 } );
+		//this.animateInParams.params.onComplete = this.showComplete.bind( this );
+	};
+
+	View.prototype = {
+		resetScrollcontent: function( time_ ) {
+			
+			var time = 500;
+			if ( typeof time_ == 'number' ) {
+				time = time_;
+				this.$content.animate( { top: 0 }, time );
+			} else {
+				this.$content.css( { top: 0 } );
+			}
+			this.scroll.top = 0;
+		},
+		scrollTo: function( top_, duration_ ) {
+			var duration = 500;
+			if ( duration_ ) duration = duration_;
+			var self = this;
+			this.$content.stop( true ).animate( { top: top_ }, { duration: duration, easing: Quad.easeOut, step: function( now, fx ) {
+				self.scroll.top = now;
+			} });
+		},
+		updateScrollcontent: function( reset_ ) {
 			this.$content = this.$el.find( 'scrollcontent' );
 
 			var $content = this.$content;
@@ -530,20 +566,8 @@ var Mobile = Mobile ? Mobile : (function() {
 				console.log( this.params.pulldownLimit );
 			}
 
-		} else {
-			document.addEventListener( 'touchstart', this._onTouchStart.bind( this ), true);
-		}
-
-
-		touchListener.on( 'update', this._onUpdate.bind( this ) );
-
-		this.init();
-		//this.setAnimateIn( .4, { alpha: 1 } );
-		//this.setAnimateOut( .4, { alpha: 0 } );
-		//this.animateInParams.params.onComplete = this.showComplete.bind( this );
-	};
-
-	View.prototype = {
+			if ( reset_ ) this.resetScrollcontent( reset_ );
+		},
 		_onTouchStart: function( e ) {
 			e.preventDefault();
 		},
@@ -684,7 +708,7 @@ var Mobile = Mobile ? Mobile : (function() {
 						var easing = 'easeOutQuad';
 						if ( newTop < 0 && newTop > -this.scroll.height ) duration = 1300;
 						else {
-							var minDuration = 300,
+							var minDuration = 850,
 								maxDuration = 1300;
 
 							if ( newTop > 0 ) {
@@ -928,9 +952,13 @@ var Mobile = Mobile ? Mobile : (function() {
 		},
 		hideComplete: function() {
 			//console.log( 'OUT COMPLETE' );
+			if ( this.params.scrolling ) this.resetScrollcontent();
 			if ( this.animateInView ) this.animateInView.animateIn();
 			//this.hide();
 			this._onInactive();
+		},
+		isVisible: function() {
+			return this._active;
 		},
 		onHide: function() {
 			//this.$el.hide();
@@ -944,6 +972,7 @@ var Mobile = Mobile ? Mobile : (function() {
 		onShow: function() {
 			//this.$el.show();
 			//this.showComplete();
+
 			this.show();
 			return;
 			TweenMax.to( this.$el, .5, { alpha: 1, onComplete: function() {
@@ -1060,6 +1089,8 @@ var Mobile = Mobile ? Mobile : (function() {
 
 		},
 		hideModal: function( m_ ) {
+			if ( !m_ ) m_ = this.currentModal;
+
 			this.modalVisible = false;
 			if ( this._onHideModal ) this._onHideModal();
 			this.currentView.setActive( true );
@@ -1334,7 +1365,13 @@ var Mobile = Mobile ? Mobile : (function() {
 				modalVisible: manager.viewController.modalVisible
 			};
 
-			if ( touchevent_ == 'touchend' ) data.elapsedTime = this.elapsedTime;
+			if ( touchevent_ == 'touchend' ) {
+				data.elapsedTime = this.elapsedTime;
+				data.clicked = false;
+				//console.log( this.touch, this.elapsedTime );
+				//if ( Math.abs( this.touch.dx ) < 3 && Math.abs( this.touch.dy ) < 3 ) data.clicked = true;
+				if ( this.touch.dx === 0 && this.touch.dy === 0 ) data.clicked = true;
+			}
 
 			$.event.trigger( data );
 		},
@@ -1371,10 +1408,14 @@ var Mobile = Mobile ? Mobile : (function() {
 			//console.log( this.busy() );
 			//console.log( Math.random() );
 
+			//console.log( e.changedTouches );
+
 			this.touch.dx = e.changedTouches[ 0 ].pageX - this.touch.x;
 			this.touch.dy = e.changedTouches[ 0 ].pageY - this.touch.y;
 			this.direction.y = this.touch.dy < 0 ? 'up' : 'down';
 			this.direction.x = this.touch.dx > 0 ? 'right' : 'left';
+
+			//console.log( this.touch.dx );
 
 			this.scroll.top = this.view.getScrollTop();
 			this.scroll.left = this.view.getScrollLeft();
@@ -1417,6 +1458,8 @@ var Mobile = Mobile ? Mobile : (function() {
 					this._emitUpdateEvent( 'touchend' );
 				}*/
 
+
+
 				this._emitUpdateEvent( 'touchend' );
 
 				
@@ -1437,10 +1480,12 @@ var Mobile = Mobile ? Mobile : (function() {
 
 			this.scroll.startTop = this.view.getScrollTop();
 			this.scroll.startLeft = this.view.getScrollLeft();
+			//console.log( e );
+			//console.log( e.pageX );
+			this.touch.x = e.pageX || e.touches[0].pageX;
+			this.touch.y = e.pageY || e.touches[0].pageY;
 
-			this.touch.x = e.pageX;
-			this.touch.y = e.pageY;
-
+			//console.log( this.touch.x, this.touch.y );
 
 			//document.addEventListener( 'touchmove', this._onTouchMove.bind( this ), true);
 			//document.addEventListener( 'touchend', this._onTouchEnd.bind( this ), true);
@@ -1662,36 +1707,62 @@ var Mobile = Mobile ? Mobile : (function() {
 		active: function( bool_ ) {
 			this._active = bool_;
 		},
-		on: function( event_, func_ ) {
+		on: function( event_, func_, bypass_ ) {
+			//console.log( event_ );
+			if ( bypass_ !== 'bypass' ) {
+				var split = event_.split( ' ' );
+				if ( split.length > 1 ) {
+					//console.log( split.length );
+					for ( var i = 0, len = split.length; i < len; i++ ) {
+						//console.log( i + ' -- ' + split[ i ] );
+						this.on( split[ i ], func_, 'bypass' );
+					}
+					return;
+				}
+			}
+
+			var custom = false;
+
 			switch( event_ ) {
 				case 'swipeleft':
 					this.onSwipeLeft( func_ );
+					custom = true;
 					break;
 				case 'swiperight':
 					this.onSwipeRight( func_ );
+					custom = true;
 					break;
 				case 'swipeup':
 					this.onSwipeUp( func_ );
+					custom = true;
 					break;
 				case 'swipedown':
 					this.onSwipeDown( func_ );
+					custom = true;
 					break;
 				case 'touch':
 					this.onTouch( func_ );
+					custom = true;
 					break;
 				case 'touchstart':
 					this.onTouchStart( func_ );
+					custom = true;
 					break;
 				case 'touchmove':
 					this.onTouchMove( func_ );
+					custom = true;
 					break;
 				case 'touchend':
 					this.onTouchEnd( func_ );
+					custom = true;
 					break;
 				case 'onscroll':
 					this.onScroll( func_ );
+					custom = true;
 					break;
 			}
+
+			if ( !custom ) this.$el.on( _event_, func_ );
 		},
 		_onTouch: false,
 		onTouch: function( func_ ){
@@ -1972,6 +2043,7 @@ var Mobile = Mobile ? Mobile : (function() {
 		document.createElement( 'view' );
 		document.createElement( 'views' );
 		document.createElement( 'modal' );
+		document.createElement( 'background' );
 
 		document.createElement( 'pagination' );
 		document.createElement( 'console' );
@@ -2012,6 +2084,9 @@ var Mobile = Mobile ? Mobile : (function() {
 		},
 		controller: function() {
 			return manager;
+		},
+		touchListener: function() {
+			return touchListener;
 		}
 	};
 
