@@ -1316,6 +1316,7 @@ var Mobile = Mobile ? Mobile : (function() {
 			document.addEventListener( 'touchmove', this._onTouchMove.bind( this ), true);
 			document.addEventListener( 'touchend', this._onTouchEnd.bind( this ), true);
 
+			this.body = $( 'body' )[0];
 			this.el = document.createElement( 'div' );
 		},
 
@@ -1389,17 +1390,21 @@ var Mobile = Mobile ? Mobile : (function() {
 		userOnSlide: -1,
 
 		checkUserOnSlide: function() {
-			this.userOnSlide = false;
-			for ( var i = 0, len = this.view.slidesArr.length; i < len; i++ ) {
-				if ( this.view.slidesArr[ i ].userActive ) {
-					this.userOnSlide = true;
+			if ( this.view ) {
+				this.userOnSlide = false;
+				for ( var i = 0, len = this.view.slidesArr.length; i < len; i++ ) {
+					if ( this.view.slidesArr[ i ].userActive ) {
+						this.userOnSlide = true;
+					}
 				}
+				return this.userOnSlide;
+			} else {
+				return false;
 			}
-			return this.userOnSlide;
 		},
 
 		_calcDelta: function( e, touchEnd ) {
-			if ( this.userOnSlide == -1 ) {
+			if ( this.view && this.userOnSlide == -1 ) {
 				this.checkUserOnSlide();
 				this._emitUpdateEvent( 'touchstart' );
 			}
@@ -1417,11 +1422,20 @@ var Mobile = Mobile ? Mobile : (function() {
 
 			//console.log( this.touch.dx );
 
-			this.scroll.top = this.view.getScrollTop();
-			this.scroll.left = this.view.getScrollLeft();
+			if ( this.view ) {
+				this.scroll.top = this.view.getScrollTop();
+				this.scroll.left = this.view.getScrollLeft();
 
-			this.scroll.width = this.view.getScrollWidth();
-			this.scroll.height = this.view.getScrollHeight();
+				this.scroll.width = this.view.getScrollWidth();
+				this.scroll.height = this.view.getScrollHeight();
+			} else {
+				this.scroll.top = this.body.scrollTop;
+				this.scroll.left = this.body.scrollLeft;
+
+				this.scroll.width = this.body.scrollWidth;
+				this.scroll.height = this.body.scrollHeight;
+			}
+			
 			
 			//this.scroll.top = $( document ).scrollTop();
 			//this.scroll.height = $( document ).height();
@@ -1463,6 +1477,8 @@ var Mobile = Mobile ? Mobile : (function() {
 				this._emitUpdateEvent( 'touchend' );
 
 				
+			} else if ( touchEnd === 'start' ) {
+				this._emitUpdateEvent( 'touchstart' );
 			} else {
 				this._emitUpdateEvent( 'touchmove' );
 			}
@@ -1478,12 +1494,22 @@ var Mobile = Mobile ? Mobile : (function() {
 			this.elapsedTime = 0;
 			this.view = manager.viewController.getCurrentView();
 
-			this.scroll.startTop = this.view.getScrollTop();
-			this.scroll.startLeft = this.view.getScrollLeft();
+			if ( this.view ) {
+				this.scroll.startTop = this.view.getScrollTop();
+				this.scroll.startLeft = this.view.getScrollLeft();
+			} else {
+				this.scroll.startTop = this.body.scrollTop;
+				this.scroll.startLeft = this.body.scrollLeft;
+			}
+
 			//console.log( e );
 			//console.log( e.pageX );
 			this.touch.x = e.pageX || e.touches[0].pageX;
 			this.touch.y = e.pageY || e.touches[0].pageY;
+
+			if ( !this.view ) {
+				this._calcDelta( e, 'start' );
+			}
 
 			//console.log( this.touch.x, this.touch.y );
 
